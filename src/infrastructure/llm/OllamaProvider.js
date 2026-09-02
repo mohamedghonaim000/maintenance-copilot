@@ -1,9 +1,10 @@
 const LLMProvider = require('../../ports/LLMProvider');
 
 class OllamaProvider extends LLMProvider {
-  constructor(model = 'llama3.2:3b', baseUrl = 'http://localhost:11434') {
+  constructor(model = 'llama3.2:3b',embeddingModel = 'nomic-embed-text', baseUrl = 'http://localhost:11434') {
     super();
     this.model = model;
+    this.embeddingModel = embeddingModel;
     this.baseUrl = baseUrl;
   }
 
@@ -24,7 +25,7 @@ class OllamaProvider extends LLMProvider {
     const response = await fetch(`${this.baseUrl}/api/embeddings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: this.model, prompt: text }),
+      body: JSON.stringify({ model: this.embeddingModel, prompt: text }),
     });
     if (!response.ok) {
       throw new Error(`Ollama embedding request failed: ${response.status}`);
