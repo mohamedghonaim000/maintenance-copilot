@@ -24,7 +24,7 @@ class OllamaProvider extends LLMProvider {
     const response = await fetch(`${this.baseUrl}/api/embeddings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: this.model, prompt: text }),
+      body: JSON.stringify({ model: this.embeddingModel, prompt: text }),
     });
     if (!response.ok) {
       throw new Error(`Ollama embedding request failed: ${response.status}`);
