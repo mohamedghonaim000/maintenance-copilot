@@ -1,28 +1,38 @@
 /**
- * Splits cleaned manual text into chunks by section boundary
- * ("Section N: Title"). This is a deliberate choice over fixed-size
- * chunking: the source manuals have a strict, consistent section
- * structure (Overview / Diagnostics / Safety / Maintenance), and
- * splitting mid-section risks returning a truncated safety section —
- * unacceptable for the D5 domain's core risk (skipped safety step).
+ * Splits cleaned manual text into chunks by known manual section boundaries.
  *
- * See docs/adrs/002-chunking-strategy.md for the full justification.
+ * We intentionally match section titles only, not every numbered line,
+ * because numbered diagnostic/safety steps also exist inside sections.
  */
 function chunkBySection(cleanedText) {
-  const sectionRegex = /(Section \d+: .+)/g;
-  const parts = cleanedText.split(sectionRegex).filter((p) => p.trim().length > 0);
+  const sectionRegex =
+    /^(\d+)\.\s+(Operating Parameters|Diagnostic Procedure|Safety Prerequisites)\s*$/gm;
+
+  const matches = [...cleanedText.matchAll(sectionRegex)];
 
   const chunks = [];
-  for (let i = 0; i < parts.length; i += 2) {
-    const sectionTitle = parts[i]?.trim();
-    const sectionBody = parts[i + 1]?.trim();
-    if (sectionTitle && sectionBody) {
-      chunks.push({
-        section: sectionTitle,
-        content: `${sectionTitle}\n${sectionBody}`,
-      });
-    }
+
+  for (let i = 0; i < matches.length; i++) {
+    const match = matches[i];
+
+    const start = match.index;
+    const end =
+      i + 1 < matches.length
+        ? matches[i + 1].index
+        : cleanedText.length;
+
+    const sectionTitle = match[0].trim();
+
+    const content = cleanedText
+      .slice(start, end)
+      .trim();
+
+    chunks.push({
+      section: sectionTitle,
+      content,
+    });
   }
+
   return chunks;
 }
 
