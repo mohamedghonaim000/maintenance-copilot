@@ -2,15 +2,15 @@ const pool = require('./postgresClient');
 const DocumentRepository = require('../../ports/DocumentRepository');
 
 class PostgresDocumentRepository extends DocumentRepository {
-  async saveDocument({ title, source, fileType, manualVersion }) {
-    const result = await pool.query(
-      `INSERT INTO documents (title, source, file_type, manual_version, status)
-       VALUES ($1, $2, $3, $4, 'processing')
-       RETURNING id`,
-      [title, source, fileType, manualVersion]
-    );
-    return result.rows[0].id;
-  }
+  async saveDocument({ title, source, fileType, manualVersion, contentHash }) {
+  const result = await pool.query(
+    `INSERT INTO documents (title, source, file_type, manual_version, content_hash, status)
+     VALUES ($1, $2, $3, $4, $5, 'processing')
+     RETURNING id`,
+    [title, source, fileType, manualVersion, contentHash]
+  );
+  return result.rows[0].id;
+}
 
   async markDocumentStatus(documentId, status, failureReason = null) {
     await pool.query(
@@ -27,6 +27,14 @@ class PostgresDocumentRepository extends DocumentRepository {
       [documentId, content, section, vectorString]
     );
   }
+
+  async findByContentHash(contentHash) {
+  const result = await pool.query(
+    `SELECT id, status FROM documents WHERE content_hash = $1 LIMIT 1`,
+    [contentHash]
+  );
+  return result.rows[0] || null;
+}
 }
 
 module.exports = PostgresDocumentRepository;

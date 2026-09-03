@@ -1,4 +1,5 @@
 const path = require("path");
+const crypto = require("crypto");
 
 const {
   extractFromTxt,
@@ -34,12 +35,30 @@ class IngestDocument {
     for (const extracted of extractedDocs) {
       let documentId;
 
+      // Idempotent re-ingestion: skip if this exact content was already ingested
+      const contentHash = crypto
+        .createHash("sha256")
+        .update(extracted.rawText)
+        .digest("hex");
+
+      const existing = await this.documentRepository.findByContentHash(contentHash);
+      if (existing) {
+        console.log(`Skipping duplicate: ${extracted.versionLabel || filePath}`);
+        results.push({
+          documentId: existing.id,
+          status: "skipped_duplicate",
+          version: extracted.versionLabel,
+        });
+        continue;
+      }
+
       try {
         documentId = await this.documentRepository.saveDocument({
           title: extracted.versionLabel || filePath,
           source: sourceLabel,
           fileType: ext.slice(1),
           manualVersion: extracted.versionLabel,
+          contentHash,
         });
 
         const cleaned = cleanText(extracted.rawText);
