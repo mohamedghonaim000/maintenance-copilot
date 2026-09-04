@@ -1,3 +1,7 @@
 ﻿node_modules
 .env
 *.log
+sample-corpus
+test.js
+test2.js
+test3.js
