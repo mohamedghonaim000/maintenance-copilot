@@ -11,6 +11,14 @@ const { cleanText } = require("../../infrastructure/parsers/TextCleaner");
 
 const { chunkBySection } = require("../../infrastructure/parsers/TextChunker");
 
+// Extracts an explicit equipment identifier (e.g. "HP-200") from the
+// document's "EQUIPMENT:" header line, stored once at ingestion time
+// rather than guessed later from a title string at query time.
+function extractEquipmentId(rawText) {
+  const match = rawText.match(/^EQUIPMENT:\s*([A-Z]{1,4}-\d{2,4})/m);
+  return match ? match[1] : null;
+}
+
 class IngestDocument {
   constructor(documentRepository, llmProvider) {
     this.documentRepository = documentRepository;
@@ -52,13 +60,17 @@ class IngestDocument {
         continue;
       }
 
+
+
       try {
+         const equipmentId = extractEquipmentId(extracted.rawText);
         documentId = await this.documentRepository.saveDocument({
           title: extracted.versionLabel || filePath,
           source: sourceLabel,
           fileType: ext.slice(1),
           manualVersion: extracted.versionLabel,
           contentHash,
+          equipmentId
         });
 
         const cleaned = cleanText(extracted.rawText);
