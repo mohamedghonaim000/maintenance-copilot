@@ -30,11 +30,18 @@ class PostgresDocumentRepository extends DocumentRepository {
 
   async findByContentHash(contentHash) {
   const result = await pool.query(
-    `SELECT id, status FROM documents WHERE content_hash = $1 LIMIT 1`,
+    `SELECT id, status, equipment_id FROM documents WHERE content_hash = $1 LIMIT 1`,
     [contentHash]
   );
   return result.rows[0] || null;
 }
+
+  async updateEquipmentId(documentId, equipmentId) {
+    await pool.query(
+      `UPDATE documents SET equipment_id = $1 WHERE id = $2`,
+      [equipmentId, documentId]
+    );
+  }
 }
 
 module.exports = PostgresDocumentRepository;

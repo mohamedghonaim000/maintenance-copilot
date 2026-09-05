@@ -49,8 +49,13 @@ class IngestDocument {
         .update(extracted.rawText)
         .digest("hex");
 
+      const equipmentId = extractEquipmentId(extracted.rawText);
       const existing = await this.documentRepository.findByContentHash(contentHash);
       if (existing) {
+        if (!existing.equipment_id && equipmentId) {
+          await this.documentRepository.updateEquipmentId(existing.id, equipmentId);
+        }
+
         console.log(`Skipping duplicate: ${extracted.versionLabel || filePath}`);
         results.push({
           documentId: existing.id,
@@ -63,7 +68,6 @@ class IngestDocument {
 
 
       try {
-         const equipmentId = extractEquipmentId(extracted.rawText);
         documentId = await this.documentRepository.saveDocument({
           title: extracted.versionLabel || filePath,
           source: sourceLabel,
