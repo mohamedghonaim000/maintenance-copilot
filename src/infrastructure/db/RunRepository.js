@@ -57,6 +57,30 @@ class RunRepository {
     );
     return result.rows[0].id;
   }
+
+  async decideApproval({ approvalId, status, approvedBy, comment, finalAction }) {
+  await pool.query(
+    `UPDATE approvals SET status = $1, approved_by = $2, comment = $3, final_action = $4, decided_at = now() WHERE id = $5`,
+    [status, approvedBy, comment, finalAction ? JSON.stringify(finalAction) : null, approvalId]
+  );
+}
+
+async getApprovalById(approvalId) {
+  const result = await pool.query(
+    `SELECT id, run_id, status, proposed_action FROM approvals WHERE id = $1`,
+    [approvalId]
+  );
+  if (result.rows.length === 0) {
+    throw new Error(`Approval not found: ${approvalId}`);
+  }
+  const row = result.rows[0];
+  return {
+    id: row.id,
+    runId: row.run_id,
+    status: row.status,
+    proposedAction: row.proposed_action,
+  };
+}
 }
 
 module.exports = RunRepository;
