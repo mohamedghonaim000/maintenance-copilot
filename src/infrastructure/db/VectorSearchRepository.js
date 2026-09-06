@@ -54,6 +54,7 @@ class VectorSearchRepository {
         c.page_number,
         c.document_id,
         d.title,
+        d.equipment_id,
         d.manual_version,
 
         1 - (c.embedding <=> $1::vector) AS similarity
@@ -123,6 +124,7 @@ class VectorSearchRepository {
         c.page_number,
         c.document_id,
         d.title,
+        d.equipment_id,
         d.manual_version,
 
         ts_rank_cd(

@@ -11,11 +11,10 @@ class AskQuestion {
 
   async run(question, topK = 5) {
     const { embedding, providerUsed: embedProvider } = await this.llmProvider.embed(question);
-    
 
     const [vectorResults, keywordResults] = await Promise.all([
-      this.vectorSearchRepository.searchByVector(embedding, topK),
-      this.vectorSearchRepository.searchByKeyword(question, topK),
+      this.vectorSearchRepository.searchByVector(embedding, { limit: topK }),
+      this.vectorSearchRepository.searchByKeyword(question, { limit: topK }),
     ]);
 
     const fusedResults = reciprocalRankFusion(vectorResults, keywordResults).slice(0, topK);
@@ -29,7 +28,6 @@ class AskQuestion {
     }
 
     const prompt = buildPrompt(question, fusedResults);
-    console.log('--- PROMPT SENT TO LLM ---\n', prompt, '\n--- END PROMPT ---');
     const { text: answer, providerUsed: completionProvider } = await this.llmProvider.complete(prompt);
 
     const citations = fusedResults.map((chunk, i) => ({

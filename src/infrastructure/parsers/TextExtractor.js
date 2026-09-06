@@ -1,32 +1,35 @@
 const fs = require('fs');
 
-/**
- * Extracts raw text from a .txt file, and splits it into separate
- * "documents" if the file contains multiple manual versions
- * (marked with "=== VERSION X ===" headers).
- *
- * Returns an array because one physical file can represent
- * multiple logical documents (e.g. HP-200 v1.0 and v2.0).
- */
 function extractFromTxt(filePath) {
   const rawText = fs.readFileSync(filePath, 'utf-8');
+
+  // Extract EQUIPMENT: header before splitting — it lives in the
+  // document-level preamble, before any "=== VERSION X ===" marker,
+  // so it must be captured once and attached to every version split.
+  const equipmentMatch = rawText.match(/^EQUIPMENT:\s*(.+)$/m);
+  const equipmentHeaderLine = equipmentMatch ? equipmentMatch[0] : null;
 
   const versionMarkerRegex = /=== VERSION [A-Z] — (.+?) ===/g;
   const matches = [...rawText.matchAll(versionMarkerRegex)];
 
   if (matches.length === 0) {
-    // Single-version document — the whole file is one document.
     return [{ versionLabel: null, rawText: rawText.trim() }];
   }
 
-  // Multi-version file — split into separate chunks per version marker.
   const documents = [];
   for (let i = 0; i < matches.length; i++) {
     const start = matches[i].index;
     const end = i + 1 < matches.length ? matches[i + 1].index : rawText.length;
-    const sectionText = rawText.slice(start, end).trim();
+    let sectionText = rawText.slice(start, end).trim();
+
+    // Re-attach the equipment header so downstream extraction
+    // (extractEquipmentId in IngestDocument) can find it in every split.
+    if (equipmentHeaderLine && !sectionText.includes('EQUIPMENT:')) {
+      sectionText = `${equipmentHeaderLine}\n${sectionText}`;
+    }
+
     documents.push({
-      versionLabel: matches[i][1].trim(), // e.g. "HP-200 / v1.0"
+      versionLabel: matches[i][1].trim(),
       rawText: sectionText,
     });
   }
