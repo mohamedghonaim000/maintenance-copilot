@@ -3,6 +3,7 @@ const { buildDependencies } = require('./compositionRoot');
 const createIngestRouter = require('./routes/ingest');
 const createAskRouter = require('./routes/ask');
 const createWorkflowRouter = require('./routes/workflow');
+const createAskStreamRouter = require('./routes/askStream');
 
 function createServer(deps = buildDependencies()) {
   const app = express();
@@ -20,6 +21,7 @@ function createServer(deps = buildDependencies()) {
   app.use(createIngestRouter(deps));
   app.use(createAskRouter(deps));
   app.use(createWorkflowRouter(deps));
+  app.use(createAskStreamRouter(deps));
 
   return app;
 }

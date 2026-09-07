@@ -48,6 +48,8 @@ function buildDependencies() {
     decideApproval,
     orchestrator,
     runRepository,
+    vectorSearchRepository,
+    llmProvider,
   };
 }
 
