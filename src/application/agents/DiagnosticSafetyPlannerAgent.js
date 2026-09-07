@@ -58,17 +58,35 @@ class DiagnosticSafetyPlannerAgent {
       relevantChunks
     );
 
-    const { text: rawAnswer } = await this.llmProvider.complete(prompt);
+    // Small local models sometimes don't follow the exact "LABEL:" format
+    // requested in the prompt. One retry with a more explicit instruction
+    // is attempted before refusing outright — this is a formatting retry,
+    // not a retry on transient network errors (handled separately by the
+    // orchestrator's resilience layer).
+    let diagnosticSteps = [];
+    let safetyPrerequisites = [];
+    const MAX_FORMAT_ATTEMPTS = 2;
 
-    const diagnosticSteps = extractListSection(rawAnswer, 'DIAGNOSTIC STEPS:');
-    const safetyPrerequisites = extractListSection(rawAnswer, 'SAFETY PREREQUISITES:');
+    for (let attempt = 1; attempt <= MAX_FORMAT_ATTEMPTS; attempt++) {
+      const attemptPrompt =
+        attempt === 1
+          ? prompt
+          : `${prompt}\n\nIMPORTANT: You MUST include a line that says exactly "SAFETY PREREQUISITES:" followed by one safety item per line. Do not skip this section.`;
+
+      const { text: rawAnswer } = await this.llmProvider.complete(attemptPrompt);
+
+      diagnosticSteps = extractListSection(rawAnswer, 'DIAGNOSTIC STEPS:');
+      safetyPrerequisites = extractListSection(rawAnswer, 'SAFETY PREREQUISITES:');
+
+      if (safetyPrerequisites.length > 0) break;
+    }
 
     if (safetyPrerequisites.length === 0) {
       // Same structural rule enforced again at the output level, in case
       // the model failed to extract prerequisites even though a safety
       // chunk was retrieved (e.g. the AC-450 incomplete-safety-section case).
       throw new Error(
-        `Model did not produce any safety prerequisites for ${input.equipmentId}, even though a safety section was retrieved. Refusing to proceed.`
+        `Model did not produce any safety prerequisites for ${input.equipmentId} after ${MAX_FORMAT_ATTEMPTS} attempts, even though a safety section was retrieved. Refusing to proceed.`
       );
     }
 
