@@ -1,6 +1,10 @@
 const express = require('express');
+const { buildDependencies } = require('./compositionRoot');
+const createIngestRouter = require('./routes/ingest');
+const createAskRouter = require('./routes/ask');
+const createWorkflowRouter = require('./routes/workflow');
 
-function createServer() {
+function createServer(deps = buildDependencies()) {
   const app = express();
   app.use(express.json());
 
@@ -12,6 +16,10 @@ function createServer() {
     // Later: check DB connectivity here too (FR-9 readiness check)
     res.json({ status: 'ready' });
   });
+
+  app.use(createIngestRouter(deps));
+  app.use(createAskRouter(deps));
+  app.use(createWorkflowRouter(deps));
 
   return app;
 }
