@@ -17,6 +17,8 @@ const MaintenanceWorkflowOrchestrator = require('../../application/orchestrator/
 const UserRepository = require('../db/UserRepository');
 const AuthenticateUser = require('../../application/use-cases/AuthenticateUser');
 
+const SessionRepository = require('../db/SessionRepository');
+
 /**
  * The composition root: the ONLY place in the entire codebase that
  * wires concrete infrastructure (Postgres, Gemini/Ollama) into the
@@ -48,6 +50,8 @@ function buildDependencies() {
   const userRepository = new UserRepository();
   const authenticateUser = new AuthenticateUser(userRepository);
 
+  const sessionRepository = new SessionRepository();
+
   return {
     ingestDocument,
     askQuestion,
@@ -58,6 +62,7 @@ function buildDependencies() {
     llmProvider,
     userRepository,      
     authenticateUser, 
+    sessionRepository,
   };
 }
 
