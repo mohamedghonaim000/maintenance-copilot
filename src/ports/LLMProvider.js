@@ -14,7 +14,14 @@ class LLMProvider {
   async complete(prompt, options = {}) {
     throw new Error('LLMProvider.complete() must be implemented');
   }
-
+/**
+   * Streaming variant of complete(). Calls onToken(chunk) for each
+   * piece of text as it arrives, and resolves with the full text once
+   * done. Used for FR-6 (token-level streaming).
+   */
+  async completeStream(prompt, onToken, options = {}) {
+    throw new Error('LLMProvider.completeStream() must be implemented');
+  }
   /**
    * @param {string} text
    * @returns {Promise<number[]>} embedding vector
