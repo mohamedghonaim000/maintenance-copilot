@@ -6,7 +6,7 @@ function createWorkflowRouter({ orchestrator, decideApproval, runRepository }) {
 
   // Start a maintenance workflow run — any authenticated user (technician) can trigger this
   router.post('/workflow/run', requireAuth, async (req, res) => {
-    const { symptomDescription, sessionId } = req.body;
+    const { symptomDescription, sessionId } = req.body || {};
     if (!symptomDescription) {
       return res.status(400).json({ error: 'symptomDescription is required' });
     }
