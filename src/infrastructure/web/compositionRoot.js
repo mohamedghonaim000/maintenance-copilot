@@ -14,6 +14,9 @@ const DiagnosticSafetyPlannerAgent = require('../../application/agents/Diagnosti
 const WorkOrderGeneratorAgent = require('../../application/agents/WorkOrderGeneratorAgent');
 const MaintenanceWorkflowOrchestrator = require('../../application/orchestrator/MaintenanceWorkflowOrchestrator');
 
+const UserRepository = require('../db/UserRepository');
+const AuthenticateUser = require('../../application/use-cases/AuthenticateUser');
+
 /**
  * The composition root: the ONLY place in the entire codebase that
  * wires concrete infrastructure (Postgres, Gemini/Ollama) into the
@@ -42,6 +45,9 @@ function buildDependencies() {
     runRepository,
   });
 
+  const userRepository = new UserRepository();
+  const authenticateUser = new AuthenticateUser(userRepository);
+
   return {
     ingestDocument,
     askQuestion,
@@ -50,6 +56,8 @@ function buildDependencies() {
     runRepository,
     vectorSearchRepository,
     llmProvider,
+    userRepository,      
+    authenticateUser, 
   };
 }
 

@@ -4,6 +4,7 @@ const createIngestRouter = require('./routes/ingest');
 const createAskRouter = require('./routes/ask');
 const createWorkflowRouter = require('./routes/workflow');
 const createAskStreamRouter = require('./routes/askStream');
+const createAuthRouter = require('./routes/auth');
 
 function createServer(deps = buildDependencies()) {
   const app = express();
@@ -22,6 +23,7 @@ function createServer(deps = buildDependencies()) {
   app.use(createAskRouter(deps));
   app.use(createWorkflowRouter(deps));
   app.use(createAskStreamRouter(deps));
+  app.use(createAuthRouter(deps));
 
   return app;
 }
