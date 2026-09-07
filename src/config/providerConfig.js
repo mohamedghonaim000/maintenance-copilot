@@ -1,5 +1,5 @@
-const GeminiProvider = require('../infrastructure/llm/GeminiProvider');
-const OllamaProvider = require('../infrastructure/llm/OllamaProvider');
+const GeminiProvider = require("../infrastructure/llm/GeminiProvider");
+const OllamaProvider = require("../infrastructure/llm/OllamaProvider");
 
 /**
  * Composition root for LLM provider selection.
@@ -24,7 +24,9 @@ function getGeminiProvider() {
 
 function getOllamaProvider() {
   if (!ollamaProvider) {
-    ollamaProvider = new OllamaProvider(process.env.OLLAMA_MODEL || 'llama3.2:3b');
+    ollamaProvider = new OllamaProvider(
+      process.env.OLLAMA_MODEL || "llama3.2:3b",
+    );
   }
   return ollamaProvider;
 }
@@ -40,22 +42,47 @@ function getLLMProvider() {
     async complete(prompt, options = {}) {
       try {
         const result = await getGeminiProvider().complete(prompt, options);
-        return { ...result, providerUsed: 'gemini' };
+        return { ...result, providerUsed: "gemini" };
       } catch (err) {
-        console.warn('[providerConfig] Gemini failed, falling back to Ollama:', err.message);
+        console.warn(
+          "[providerConfig] Gemini failed, falling back to Ollama:",
+          err.message,
+        );
         const result = await getOllamaProvider().complete(prompt, options);
-        return { ...result, providerUsed: 'ollama' };
+        return { ...result, providerUsed: "ollama" };
+      }
+    },
+
+    async completeStream(prompt, onToken, options = {}) {
+      if (process.env.FORCE_OFFLINE_MODE === "true") {
+        return getOllamaProvider().completeStream(prompt, onToken, options);
+      }
+      try {
+        return await getGeminiProvider().completeStream(
+          prompt,
+          onToken,
+          options,
+        );
+      } catch (err) {
+        console.warn(
+          "[providerConfig] Gemini stream failed, falling back to Ollama:",
+          err.message,
+        );
+        return getOllamaProvider().completeStream(prompt, onToken, options);
       }
     },
 
     async embed(text) {
       try {
         const result = await getGeminiProvider().embed(text);
-        return { embedding: result, providerUsed: 'gemini' };
+        return { embedding: result, providerUsed: "gemini" };
       } catch (err) {
-        console.warn('[providerConfig] Gemini embed failed, falling back to Ollama:', err.message);
+        console.warn(
+          "[providerConfig] Gemini embed failed, falling back to Ollama:",
+          err.message,
+        );
         const result = await getOllamaProvider().embed(text);
-        return { embedding: result, providerUsed: 'ollama' };
+        return { embedding: result, providerUsed: "ollama" };
       }
     },
   };

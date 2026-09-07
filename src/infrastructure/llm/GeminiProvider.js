@@ -23,6 +23,17 @@ class GeminiProvider extends LLMProvider {
   });
   return result.embedding.values;
 }
+
+async completeStream(prompt, onToken) {
+  const result = await this.model.generateContentStream(prompt);
+  let fullText = '';
+  for await (const chunk of result.stream) {
+    const chunkText = chunk.text();
+    fullText += chunkText;
+    onToken(chunkText);
+  }
+  return { text: fullText };
+}
 }
 
 module.exports = GeminiProvider;

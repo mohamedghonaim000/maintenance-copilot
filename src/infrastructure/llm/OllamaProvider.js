@@ -21,6 +21,34 @@ class OllamaProvider extends LLMProvider {
     return { text: data.response, tokensUsed: data.eval_count ?? 0 };
   }
 
+  async completeStream(prompt, onToken) {
+  const response = await fetch(`${this.baseUrl}/api/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: this.model, prompt, stream: true }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Ollama stream request failed: ${response.status}`);
+  }
+
+  let fullText = '';
+  const decoder = new TextDecoder();
+
+  for await (const chunk of response.body) {
+    const lines = decoder.decode(chunk).split('\n').filter(Boolean);
+    for (const line of lines) {
+      const data = JSON.parse(line);
+      if (data.response) {
+        fullText += data.response;
+        onToken(data.response);
+      }
+    }
+  }
+
+  return { text: fullText };
+}
+
   async embed(text) {
     const response = await fetch(`${this.baseUrl}/api/embeddings`, {
       method: 'POST',
