@@ -11,9 +11,6 @@ const { cleanText } = require("../../infrastructure/parsers/TextCleaner");
 
 const { chunkBySection } = require("../../infrastructure/parsers/TextChunker");
 
-// Extracts an explicit equipment identifier (e.g. "HP-200") from the
-// document's "EQUIPMENT:" header line, stored once at ingestion time
-// rather than guessed later from a title string at query time.
 function extractEquipmentId(rawText) {
   const match = rawText.match(/^EQUIPMENT:\s*([A-Z]{1,4}-\d{2,4})/m);
   return match ? match[1] : null;
@@ -25,8 +22,9 @@ class IngestDocument {
     this.llmProvider = llmProvider;
   }
 
-  async run(filePath, sourceLabel) {
-    const ext = path.extname(filePath).toLowerCase();
+  async run(filePath, sourceLabel, originalFileName = null) {
+    const fileName = originalFileName || filePath;
+    const ext = path.extname(fileName).toLowerCase();
 
     let extractedDocs;
 
@@ -43,7 +41,6 @@ class IngestDocument {
     for (const extracted of extractedDocs) {
       let documentId;
 
-      // Idempotent re-ingestion: skip if this exact content was already ingested
       const contentHash = crypto
         .createHash("sha256")
         .update(extracted.rawText)
@@ -65,8 +62,6 @@ class IngestDocument {
         continue;
       }
 
-
-
       try {
         documentId = await this.documentRepository.saveDocument({
           title: extracted.versionLabel || filePath,
@@ -78,22 +73,19 @@ class IngestDocument {
         });
 
         const cleaned = cleanText(extracted.rawText);
-
         const chunks = chunkBySection(cleaned);
 
         if (chunks.length === 0) {
           throw new Error(
             `No chunks generated for document version: ${
               extracted.versionLabel || "unknown"
-            }`,
+            }`
           );
         }
 
         for (const chunk of chunks) {
           console.log(`Embedding section: ${chunk.section}`);
-
           const { embedding } = await this.llmProvider.embed(chunk.content);
-
           await this.documentRepository.saveChunk({
             documentId,
             content: chunk.content,
@@ -114,7 +106,7 @@ class IngestDocument {
           await this.documentRepository.markDocumentStatus(
             documentId,
             "failed",
-            err.message,
+            err.message
           );
         }
 

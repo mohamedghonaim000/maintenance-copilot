@@ -18,6 +18,7 @@ const UserRepository = require('../db/UserRepository');
 const AuthenticateUser = require('../../application/use-cases/AuthenticateUser');
 
 const SessionRepository = require('../db/SessionRepository');
+const SessionUseCases = require('../../application/session/SessionUseCases');
 
 /**
  * The composition root: the ONLY place in the entire codebase that
@@ -51,6 +52,7 @@ function buildDependencies() {
   const authenticateUser = new AuthenticateUser(userRepository);
 
   const sessionRepository = new SessionRepository();
+  const sessionUseCases = new SessionUseCases(sessionRepository);
 
   return {
     ingestDocument,
@@ -63,6 +65,7 @@ function buildDependencies() {
     userRepository,      
     authenticateUser, 
     sessionRepository,
+    sessionUseCases,
   };
 }
 
