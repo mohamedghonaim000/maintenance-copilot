@@ -6,10 +6,18 @@ const createWorkflowRouter = require('./routes/workflow');
 const createAskStreamRouter = require('./routes/askStream');
 const createAuthRouter = require('./routes/auth');
 const createSessionsRouter = require('./routes/sessions');
+const cors = require('cors'); 
+
 
 function createServer(deps = buildDependencies()) {
   const app = express();
   app.use(express.json());
+
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true, 
+}));
 
   app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
