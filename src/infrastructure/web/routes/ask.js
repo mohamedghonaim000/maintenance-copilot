@@ -1,13 +1,12 @@
 const express = require('express');
+const { validateBody } = require('../validation/validate');
+const { AskBodySchema } = require('../validation/schemas');
 
 function createAskRouter({ askQuestion }) {
   const router = express.Router();
 
-  router.post('/ask', async (req, res) => {
-    const { question } = req.body || {};
-    if (!question || typeof question !== 'string') {
-      return res.status(400).json({ error: 'question (string) is required' });
-    }
+  router.post('/ask', validateBody(AskBodySchema), async (req, res) => {
+    const { question } = req.body;
 
     try {
       const result = await askQuestion.run(question);

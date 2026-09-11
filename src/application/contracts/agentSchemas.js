@@ -10,6 +10,8 @@ const SymptomMatcherOutput = z.object({
   manualVersion: z.string(),
   confidence: z.number().min(0).max(1),
   matchedChunkIds: z.array(z.string()),
+  tokensUsed: z.number().optional(),
+  cost: z.number().optional(),
 });
 
 // ============ Diagnostic & Safety Planner ============
@@ -23,6 +25,8 @@ const DiagnosticSafetyPlannerOutput = z.object({
   diagnosticSteps: z.array(z.string()).min(1),
   safetyPrerequisites: z.array(z.string()).min(1),
   sourceChunkIds: z.array(z.string()),
+  tokensUsed: z.number().optional(),
+  cost: z.number().optional(),
 });
 
 // ============ Work Order Generator ============
@@ -39,6 +43,8 @@ const WorkOrderGeneratorOutput = z.object({
   diagnosticSteps: z.array(z.string()),
   safetyPrerequisites: z.array(z.string()).min(1),
   status: z.literal('draft'),
+  tokensUsed: z.number().optional(),
+  cost: z.number().optional(),
 });
 
 module.exports = {

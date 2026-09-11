@@ -56,6 +56,8 @@ class SymptomMatcherAgent {
       manualVersion: topMatch.manual_version || 'unknown',
       confidence,
       matchedChunkIds: fused.slice(0, 5).map((r) => r.id),
+      tokensUsed: 0,
+      cost: 0,
     };
 
     return SymptomMatcherOutput.parse(output);

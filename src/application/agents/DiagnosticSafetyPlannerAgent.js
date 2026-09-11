@@ -79,18 +79,12 @@ class DiagnosticSafetyPlannerAgent {
       input
     );
 
-    // Structure and validate output
     const output = {
       diagnosticSteps,
       safetyPrerequisites,
       sourceChunkIds: uniqueChunks.map((c) => c.id),
-      metadata: {
-        equipmentId: input.equipmentId,
-        manualVersion: input.manualVersion,
-        totalChunksRetrieved: uniqueChunks.length,
-        safetyChunksFound: safetyChunks.length,
-        diagnosticChunksFound: diagnosticChunks.length,
-      },
+      tokensUsed: this._lastTokensUsed ?? 0,
+      cost: this._lastCost ?? 0,
     };
 
     return DiagnosticSafetyPlannerOutput.parse(output);
@@ -201,6 +195,10 @@ class DiagnosticSafetyPlannerAgent {
       relevantChunks
     );
 
+    // Reset token/cost accumulators for this run
+    this._lastTokensUsed = 0;
+    this._lastCost = 0;
+
     let lastError = null;
 
     for (let attempt = 1; attempt <= this.maxFormatAttempts; attempt++) {
@@ -208,6 +206,12 @@ class DiagnosticSafetyPlannerAgent {
         const prompt = this.buildAttemptPrompt(basePrompt, attempt);
         const llmResult = await this.callLLMWithTimeout(prompt);
         const response = typeof llmResult === 'string' ? llmResult : llmResult.text;
+
+        // Capture token/cost metadata from the provider result
+        if (llmResult && typeof llmResult === 'object') {
+          this._lastTokensUsed = (this._lastTokensUsed ?? 0) + (llmResult.tokensUsed ?? 0);
+          this._lastCost = (this._lastCost ?? 0) + (llmResult.cost ?? 0);
+        }
 
         if (typeof response !== 'string') {
           throw new Error('LLM provider returned no response text');
@@ -233,38 +237,10 @@ class DiagnosticSafetyPlannerAgent {
     }
 
     // If we exhausted attempts without success
-    const fallbackResponse = this.buildGroundedFallbackResponse(relevantChunks);
-    if (fallbackResponse) {
-      console.warn('Model response was not structured; using retrieved safety and diagnostic content.');
-      return fallbackResponse;
-    }
-
     throw new Error(
       `Model did not produce any safety prerequisites for ${input.equipmentId} after ${this.maxFormatAttempts} attempts, ` +
       `even though a safety section was retrieved. Refusing to proceed.`
     );
-  }
-
-  /**
-   * Build a deterministic response from retrieved evidence when the model
-   * cannot satisfy the required list format.
-   * @param {Array} relevantChunks - Retrieved diagnostic and safety chunks
-   * @returns {string|null} Structured fallback response or null
-   */
-  buildGroundedFallbackResponse(relevantChunks) {
-    const { diagnosticChunks, safetyChunks } = this.categorizeChunks(relevantChunks);
-    if (diagnosticChunks.length === 0 || safetyChunks.length === 0) {
-      return null;
-    }
-
-    const formatChunks = (chunks) => chunks
-      .map((chunk) => chunk.content?.trim())
-      .filter(Boolean)
-      .map((content) => `- ${content}`)
-      .join('\n');
-
-    return `DIAGNOSTIC STEPS:\n${formatChunks(diagnosticChunks)}\n\n` +
-      `SAFETY PREREQUISITES:\n${formatChunks(safetyChunks)}`;
   }
 
   /**

@@ -12,6 +12,17 @@ const OllamaProvider = require("../infrastructure/llm/OllamaProvider");
  * Everything else in application/ talks to the LLMProvider interface only.
  */
 
+/**
+ * Approximate cost per 1 000 tokens by provider.
+ * Gemini Flash pricing (2024 public list); Ollama is free/local = $0.
+ * These are hardcoded MVP estimates — SDD Part A deferred: replace with
+ * a live pricing API or a more granular per-model table for production.
+ */
+const TOKEN_COST_PER_1K = {
+  gemini: 0.001,
+  ollama: 0,
+};
+
 let geminiProvider = null;
 let ollamaProvider = null;
 
@@ -32,6 +43,27 @@ function getOllamaProvider() {
 }
 
 /**
+ * Compute approximate cost from token count and provider name.
+ * @param {number} tokensUsed
+ * @param {string} providerUsed - 'gemini' | 'ollama'
+ * @returns {number} cost in USD
+ */
+function computeCost(tokensUsed, providerUsed) {
+  const ratePerK = TOKEN_COST_PER_1K[providerUsed] ?? 0;
+  return (tokensUsed / 1000) * ratePerK;
+}
+
+// Utility to prevent API keys from leaking in error logs (OWASP LLM Top 10)
+function sanitizeError(err) {
+  if (!err || !err.message) return 'Unknown error';
+  let msg = err.message;
+  if (process.env.GEMINI_API_KEY && msg.includes(process.env.GEMINI_API_KEY)) {
+    msg = msg.replaceAll(process.env.GEMINI_API_KEY, '[REDACTED_API_KEY]');
+  }
+  return msg;
+}
+
+/**
  * Returns a provider-like object that tries Gemini first, and
  * transparently falls back to Ollama on failure. The caller never
  * knows which one actually served the request — but the mode is
@@ -42,14 +74,24 @@ function getLLMProvider() {
     async complete(prompt, options = {}) {
       try {
         const result = await getGeminiProvider().complete(prompt, options);
-        return { ...result, providerUsed: "gemini" };
+        const providerUsed = "gemini";
+        return {
+          ...result,
+          providerUsed,
+          cost: computeCost(result.tokensUsed ?? 0, providerUsed),
+        };
       } catch (err) {
         console.warn(
           "[providerConfig] Gemini failed, falling back to Ollama:",
-          err.message,
+          sanitizeError(err),
         );
         const result = await getOllamaProvider().complete(prompt, options);
-        return { ...result, providerUsed: "ollama" };
+        const providerUsed = "ollama";
+        return {
+          ...result,
+          providerUsed,
+          cost: computeCost(result.tokensUsed ?? 0, providerUsed),
+        };
       }
     },
 
@@ -66,7 +108,7 @@ function getLLMProvider() {
       } catch (err) {
         console.warn(
           "[providerConfig] Gemini stream failed, falling back to Ollama:",
-          err.message,
+          sanitizeError(err),
         );
         return getOllamaProvider().completeStream(prompt, onToken, options);
       }
@@ -79,7 +121,7 @@ function getLLMProvider() {
       } catch (err) {
         console.warn(
           "[providerConfig] Gemini embed failed, falling back to Ollama:",
-          err.message,
+          sanitizeError(err),
         );
         const result = await getOllamaProvider().embed(text);
         return { embedding: result, providerUsed: "ollama" };

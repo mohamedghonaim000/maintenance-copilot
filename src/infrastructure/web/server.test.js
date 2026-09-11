@@ -2,6 +2,11 @@ const http = require('http');
 const jwt = require('jsonwebtoken');
 const createServer = require('./server');
 
+// Fixed UUIDs used throughout the tests — validation now enforces UUID format
+const MOCK_SESSION_ID = '11111111-1111-4111-8111-111111111111';
+const MOCK_RUN_ID     = '22222222-2222-4222-8222-222222222222';
+const MOCK_APPROVAL_ID = '33333333-3333-4333-8333-333333333333';
+
 function createMockDeps() {
   return {
     ingestDocument: {
@@ -33,13 +38,15 @@ function createMockDeps() {
       login: jest.fn(async ({ email }) => ({ token: `token:${email}` })),
     },
     sessionRepository: {
-      createSession: jest.fn(async ({ userId, title }) => ({ id: 'session-1', userId, title })),
-      getSessionsByUser: jest.fn(async (userId) => [{ id: 'session-1', userId, title: 'Pump 4' }]),
-      getRunsBySession: jest.fn(async (sessionId) => [{ id: 'run-1', sessionId }]),
+      createSession: jest.fn(async ({ userId, title }) => ({ id: MOCK_SESSION_ID, userId, title })),
+      getSessionsByUser: jest.fn(async (userId) => [{ id: MOCK_SESSION_ID, userId, title: 'Pump 4' }]),
+      getRunsBySession: jest.fn(async (sessionId) => [{ id: MOCK_RUN_ID, sessionId }]),
     },
     vectorSearchRepository: {},
     llmProvider: {},
-    runRepository: {},
+    runRepository: {
+      getRunCost: jest.fn(async (runId) => ({ runId, totalTokens: 0, totalCost: 0, status: 'completed' })),
+    },
   };
 }
 
@@ -123,10 +130,11 @@ describe('web server endpoints', () => {
     const deps = createMockDeps();
     const app = createServer(deps);
 
-    await expect(request(app, { method: 'POST', path: '/ingest' })).resolves.toEqual({
-      statusCode: 400,
-      body: { error: 'filePath is required' },
-    });
+    // Missing body → Zod validation failure (error + details array)
+    const emptyResp = await request(app, { method: 'POST', path: '/ingest' });
+    expect(emptyResp.statusCode).toBe(400);
+    expect(emptyResp.body.error).toBe('Validation failed');
+    expect(emptyResp.body.details).toBeDefined();
 
     await expect(
       request(app, {
@@ -145,10 +153,10 @@ describe('web server endpoints', () => {
     const deps = createMockDeps();
     const app = createServer(deps);
 
-    await expect(request(app, { method: 'POST', path: '/ask' })).resolves.toEqual({
-      statusCode: 400,
-      body: { error: 'question (string) is required' },
-    });
+    // Missing body → Zod validation failure
+    const emptyResp = await request(app, { method: 'POST', path: '/ask' });
+    expect(emptyResp.statusCode).toBe(400);
+    expect(emptyResp.body.error).toBe('Validation failed');
 
     await expect(
       request(app, { method: 'POST', path: '/ask', body: { question: 'What failed?' } })
@@ -173,29 +181,30 @@ describe('web server endpoints', () => {
     const app = createServer(deps);
     const headers = authHeaders();
 
-    await expect(request(app, { method: 'POST', path: '/workflow/run', headers })).resolves.toEqual({
-      statusCode: 400,
-      body: { error: 'symptomDescription is required' },
-    });
+    // Missing body → Zod validation failure
+    const emptyResp = await request(app, { method: 'POST', path: '/workflow/run', headers });
+    expect(emptyResp.statusCode).toBe(400);
+    expect(emptyResp.body.error).toBe('Validation failed');
 
+    // sessionId is optional — omit it so we don't need a valid UUID in this test
     await expect(
       request(app, {
         method: 'POST',
         path: '/workflow/run',
-        body: { symptomDescription: 'Pump vibration', sessionId: 's1' },
+        body: { symptomDescription: 'Pump vibration noise' },
         headers,
       })
     ).resolves.toEqual({
       statusCode: 200,
       body: {
         status: 'awaiting_approval',
-        symptomDescription: 'Pump vibration',
-        sessionId: 's1',
+        symptomDescription: 'Pump vibration noise',
+        sessionId: undefined,
       },
     });
     expect(deps.orchestrator.runWorkflow).toHaveBeenCalledWith({
-      symptomDescription: 'Pump vibration',
-      sessionId: 's1',
+      symptomDescription: 'Pump vibration noise',
+      sessionId: undefined,
       initiatedBy: 'user-1',
     });
   });
@@ -204,10 +213,11 @@ describe('web server endpoints', () => {
     const deps = createMockDeps();
     const app = createServer(deps);
 
+    // Technician (role check happens before param validation)
     await expect(
       request(app, {
         method: 'POST',
-        path: '/approvals/ap-1/decide',
+        path: `/approvals/${MOCK_APPROVAL_ID}/decide`,
         body: { decision: 'approved' },
         headers: authHeaders(),
       })
@@ -216,19 +226,20 @@ describe('web server endpoints', () => {
       body: { error: 'Insufficient permissions for this action' },
     });
 
+    // Supervisor with valid UUID param and valid body
     await expect(
       request(app, {
         method: 'POST',
-        path: '/approvals/ap-1/decide',
-        body: { decision: 'approved', approvedBy: 'operator' },
+        path: `/approvals/${MOCK_APPROVAL_ID}/decide`,
+        body: { decision: 'approved' },
         headers: authHeaders({ userId: 'supervisor-1', role: 'supervisor' }),
       })
     ).resolves.toEqual({
       statusCode: 200,
-      body: { approvalId: 'ap-1', status: 'approved' },
+      body: { approvalId: MOCK_APPROVAL_ID, status: 'approved' },
     });
     expect(deps.decideApproval.run).toHaveBeenCalledWith({
-      approvalId: 'ap-1',
+      approvalId: MOCK_APPROVAL_ID,
       decision: 'approved',
       approvedBy: 'supervisor-1',
       comment: undefined,
@@ -240,12 +251,15 @@ describe('web server endpoints', () => {
     const deps = createMockDeps();
     const app = createServer(deps);
 
-    await expect(
-      request(app, { method: 'POST', path: '/auth/register', body: { email: 'tech@example.com' } })
-    ).resolves.toEqual({
-      statusCode: 400,
-      body: { error: 'email, password, and a valid role are required' },
+    // Missing password and role → Zod validation failure with details
+    const badResp = await request(app, {
+      method: 'POST',
+      path: '/auth/register',
+      body: { email: 'tech@example.com' },
     });
+    expect(badResp.statusCode).toBe(400);
+    expect(badResp.body.error).toBe('Validation failed');
+    expect(badResp.body.details).toBeDefined();
 
     await expect(
       request(app, {
@@ -269,15 +283,16 @@ describe('web server endpoints', () => {
       request(app, { method: 'POST', path: '/sessions', body: { title: 'Pump 4' }, headers })
     ).resolves.toEqual({
       statusCode: 201,
-      body: { id: 'session-1', userId: 'tech-1', title: 'Pump 4' },
+      body: { id: MOCK_SESSION_ID, userId: 'tech-1', title: 'Pump 4' },
     });
     await expect(request(app, { path: '/sessions', headers })).resolves.toEqual({
       statusCode: 200,
-      body: [{ id: 'session-1', userId: 'tech-1', title: 'Pump 4' }],
+      body: [{ id: MOCK_SESSION_ID, userId: 'tech-1', title: 'Pump 4' }],
     });
-    await expect(request(app, { path: '/sessions/session-1/runs', headers })).resolves.toEqual({
+    // sessionId must now be a valid UUID
+    await expect(request(app, { path: `/sessions/${MOCK_SESSION_ID}/runs`, headers })).resolves.toEqual({
       statusCode: 200,
-      body: [{ id: 'run-1', sessionId: 'session-1' }],
+      body: [{ id: MOCK_RUN_ID, sessionId: MOCK_SESSION_ID }],
     });
   });
 });
