@@ -53,6 +53,16 @@ function computeCost(tokensUsed, providerUsed) {
   return (tokensUsed / 1000) * ratePerK;
 }
 
+// Utility to prevent API keys from leaking in error logs (OWASP LLM Top 10)
+function sanitizeError(err) {
+  if (!err || !err.message) return 'Unknown error';
+  let msg = err.message;
+  if (process.env.GEMINI_API_KEY && msg.includes(process.env.GEMINI_API_KEY)) {
+    msg = msg.replaceAll(process.env.GEMINI_API_KEY, '[REDACTED_API_KEY]');
+  }
+  return msg;
+}
+
 /**
  * Returns a provider-like object that tries Gemini first, and
  * transparently falls back to Ollama on failure. The caller never
@@ -73,7 +83,7 @@ function getLLMProvider() {
       } catch (err) {
         console.warn(
           "[providerConfig] Gemini failed, falling back to Ollama:",
-          err.message,
+          sanitizeError(err),
         );
         const result = await getOllamaProvider().complete(prompt, options);
         const providerUsed = "ollama";
@@ -98,7 +108,7 @@ function getLLMProvider() {
       } catch (err) {
         console.warn(
           "[providerConfig] Gemini stream failed, falling back to Ollama:",
-          err.message,
+          sanitizeError(err),
         );
         return getOllamaProvider().completeStream(prompt, onToken, options);
       }
@@ -111,7 +121,7 @@ function getLLMProvider() {
       } catch (err) {
         console.warn(
           "[providerConfig] Gemini embed failed, falling back to Ollama:",
-          err.message,
+          sanitizeError(err),
         );
         const result = await getOllamaProvider().embed(text);
         return { embedding: result, providerUsed: "ollama" };
