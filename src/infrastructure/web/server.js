@@ -8,6 +8,7 @@ const createAuthRouter = require('./routes/auth');
 const createSessionsRouter = require('./routes/sessions');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 
 /**
@@ -40,17 +41,33 @@ const authLimiter = rateLimit({
   message: { error: 'Too many login attempts, please try again later.' },
 });
 
+/**
+ * Allowed origin for CORS. Read from ALLOWED_ORIGIN env var so staging/prod
+ * can override without code changes. Defaults to the Vite dev server port.
+ * Wildcard '*' is intentionally NOT used — OWASP A05 Security Misconfiguration.
+ * SDD Part A — deferred: for multi-origin support, extend to an allowlist array.
+ */
+const allowedOrigin = process.env.ALLOWED_ORIGIN || 'http://localhost:5173';
+
 function createServer(deps = buildDependencies()) {
   const app = express();
 
-  // Apply global rate limiter first (before any routes)
+  /**
+   * Security headers via Helmet (OWASP A05 Security Misconfiguration).
+   * Defaults set: X-Content-Type-Options, X-Frame-Options, X-XSS-Protection,
+   * Strict-Transport-Security, Content-Security-Policy, and more.
+   * SDD Part A — deferred: tighten CSP directives for the production frontend.
+   */
+  app.use(helmet());
+
+  // Apply global rate limiter before any routes
   app.use(globalLimiter);
 
   app.use(express.json());
 
   app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true, 
+    origin: allowedOrigin,
+    credentials: true,
   }));
 
   app.get('/health', (req, res) => {
