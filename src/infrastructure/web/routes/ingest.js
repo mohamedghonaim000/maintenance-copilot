@@ -1,5 +1,7 @@
 const express = require('express');
 const multer = require('multer');
+const { validateBody } = require('../validation/validate');
+const { IngestBodySchema, IngestUploadBodySchema } = require('../validation/schemas');
 
 const upload = multer({ dest: 'sample-corpus/' });
 
@@ -7,14 +9,8 @@ function createIngestRouter({ ingestDocument }) {
   const router = express.Router();
 
   // Ingest document using a file path
-  router.post('/ingest', async (req, res) => {
-    const { filePath, source } = req.body || {};
-
-    if (!filePath) {
-      return res.status(400).json({
-        error: 'filePath is required',
-      });
-    }
+  router.post('/ingest', validateBody(IngestBodySchema), async (req, res) => {
+    const { filePath, source } = req.body;
 
     try {
       const results = await ingestDocument.run(
@@ -31,7 +27,7 @@ function createIngestRouter({ ingestDocument }) {
   });
 
   // Ingest document using multipart file upload
-  router.post('/ingest/upload', upload.single('file'), async (req, res) => {
+  router.post('/ingest/upload', upload.single('file'), validateBody(IngestUploadBodySchema), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         error: 'file is required',
@@ -39,7 +35,7 @@ function createIngestRouter({ ingestDocument }) {
     }
 
     try {
-      const { source } = req.body || {};
+      const { source } = req.body;
 
       const results = await ingestDocument.run(
         req.file.path,

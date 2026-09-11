@@ -3,6 +3,8 @@ const express = require('express');
 const { reciprocalRankFusion } = require('../../../application/retrieval/hybridFusion');
 const { buildPrompt } = require('../../../application/retrieval/buildPrompt');
 const { requireAuth } = require('../middlewares/auth');
+const { validateBody } = require('../validation/validate');
+const { AskStreamBodySchema } = require('../validation/schemas');
 
 const REFUSAL_TEXT = 'Not enough information in the corpus to answer this question.';
 const GREETING_TEXT = 'Hello! How can I help you with your maintenance question today?';
@@ -15,14 +17,8 @@ function createAskStreamRouter({
 }) {
   const router = express.Router();
 
-  router.post('/ask/stream', requireAuth, async (req, res) => {
-    const { question, sessionId } = req.body || {};
-    if (!question || typeof question !== 'string' || !question.trim()) {
-      return res.status(400).json({ error: 'question (string) is required' });
-    }
-    if (!sessionId || typeof sessionId !== 'string') {
-      return res.status(400).json({ error: 'sessionId is required' });
-    }
+  router.post('/ask/stream', requireAuth, validateBody(AskStreamBodySchema), async (req, res) => {
+    const { question, sessionId } = req.body;
 
     let runId;
     let clientDisconnected = false;

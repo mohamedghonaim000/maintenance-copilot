@@ -1,29 +1,40 @@
 const express = require('express');
 const { requireAuth, requireRole } = require('../middlewares/auth');
+const { validateBody, validateParams } = require('../validation/validate');
+const {
+  WorkflowRunBodySchema,
+  ApprovalDecideBodySchema,
+  ApprovalIdParamsSchema,
+  RunIdParamsSchema,
+} = require('../validation/schemas');
 
 function createWorkflowRouter({ orchestrator, decideApproval, runRepository }) {
   const router = express.Router();
 
   // Start a maintenance workflow run — any authenticated user (technician) can trigger this
-  router.post('/workflow/run', requireAuth, async (req, res) => {
-    const { symptomDescription, sessionId } = req.body || {};
-    if (!symptomDescription) {
-      return res.status(400).json({ error: 'symptomDescription is required' });
-    }
+  router.post(
+    '/workflow/run',
+    requireAuth,
+    validateBody(WorkflowRunBodySchema),
+    async (req, res) => {
+      const { symptomDescription, sessionId } = req.body;
 
-    const result = await orchestrator.runWorkflow({
-      symptomDescription,
-      sessionId,
-      initiatedBy: req.user.userId,
-    });
-    res.json(result);
-  });
+      const result = await orchestrator.runWorkflow({
+        symptomDescription,
+        sessionId,
+        initiatedBy: req.user.userId,
+      });
+      res.json(result);
+    }
+  );
 
   // Decide on a pending approval — ONLY supervisors can approve/reject work orders
   router.post(
     '/approvals/:approvalId/decide',
     requireAuth,
     requireRole('supervisor'),
+    validateParams(ApprovalIdParamsSchema),
+    validateBody(ApprovalDecideBodySchema),
     async (req, res) => {
       const { approvalId } = req.params;
       const { decision, comment, editedAction } = req.body;
@@ -48,15 +59,20 @@ function createWorkflowRouter({ orchestrator, decideApproval, runRepository }) {
    * Returns the total token usage and approximate cost for a run.
    * Protected by requireAuth — useful for FR-9 observability demos.
    */
-  router.get('/runs/:runId/cost', requireAuth, async (req, res) => {
-    try {
-      const cost = await runRepository.getRunCost(req.params.runId);
-      res.json(cost);
-    } catch (err) {
-      const status = err.message.startsWith('Run not found') ? 404 : 500;
-      res.status(status).json({ error: err.message });
+  router.get(
+    '/runs/:runId/cost',
+    requireAuth,
+    validateParams(RunIdParamsSchema),
+    async (req, res) => {
+      try {
+        const cost = await runRepository.getRunCost(req.params.runId);
+        res.json(cost);
+      } catch (err) {
+        const status = err.message.startsWith('Run not found') ? 404 : 500;
+        res.status(status).json({ error: err.message });
+      }
     }
-  });
+  );
 
   return router;
 }
