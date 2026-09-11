@@ -175,6 +175,43 @@ paths:
         '401':
           description: Missing or invalid token
 
+    /runs/{runId}/cost:
+    get:
+      tags: [Workflow]
+      summary: Get cost breakdown for a workflow run
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Cost breakdown for the run
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  runId: { type: string, format: uuid }
+                  totalTokens: { type: integer }
+                  totalCostUsd: { type: number }
+                  breakdown:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        agentName: { type: string }
+                        tokens: { type: integer }
+                        costUsd: { type: number }
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Run not found
+        '500':
+          description: Internal server error
+
   /approvals/{approvalId}/decide:
     post:
       tags: [Workflow]
@@ -215,3 +252,4 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
