@@ -93,7 +93,14 @@ class DiagnosticSafetyPlannerAgent {
       },
     };
 
-    return DiagnosticSafetyPlannerOutput.parse(output);
+    // Attach LLM usage metadata after Zod parse (Zod strips unknown keys during
+    // parse, so we use Object.assign to add observability fields without touching
+    // the contract schema in agentSchemas.js).
+    const parsed = DiagnosticSafetyPlannerOutput.parse(output);
+    return Object.assign(parsed, {
+      tokensUsed: this._lastTokensUsed ?? 0,
+      cost: this._lastCost ?? 0,
+    });
   }
 
   /**
@@ -201,6 +208,10 @@ class DiagnosticSafetyPlannerAgent {
       relevantChunks
     );
 
+    // Reset token/cost accumulators for this run
+    this._lastTokensUsed = 0;
+    this._lastCost = 0;
+
     let lastError = null;
 
     for (let attempt = 1; attempt <= this.maxFormatAttempts; attempt++) {
@@ -208,6 +219,12 @@ class DiagnosticSafetyPlannerAgent {
         const prompt = this.buildAttemptPrompt(basePrompt, attempt);
         const llmResult = await this.callLLMWithTimeout(prompt);
         const response = typeof llmResult === 'string' ? llmResult : llmResult.text;
+
+        // Capture token/cost metadata from the provider result
+        if (llmResult && typeof llmResult === 'object') {
+          this._lastTokensUsed = (this._lastTokensUsed ?? 0) + (llmResult.tokensUsed ?? 0);
+          this._lastCost = (this._lastCost ?? 0) + (llmResult.cost ?? 0);
+        }
 
         if (typeof response !== 'string') {
           throw new Error('LLM provider returned no response text');

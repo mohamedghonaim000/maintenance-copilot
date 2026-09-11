@@ -36,6 +36,9 @@ class MaintenanceWorkflowOrchestrator {
     });
 
     let iterationCount = 0;
+    // Accumulators for run-level cost observability (FR-9)
+    let totalTokens = 0;
+    let totalCost = 0;
 
     try {
       // ---- Step 1: Symptom Matcher ----
@@ -50,6 +53,10 @@ class MaintenanceWorkflowOrchestrator {
         stepOrder: 1,
         input: { symptomDescription },
         fn: () => this.symptomMatcher.run({ symptomDescription }),
+        onStepCost: (tokens, cost) => {
+          totalTokens += tokens;
+          totalCost += cost;
+        },
       });
 
       // ---- Step 2: Diagnostic & Safety Planner ----
@@ -70,6 +77,10 @@ class MaintenanceWorkflowOrchestrator {
         stepOrder: 2,
         input: plannerInput,
         fn: () => this.diagnosticSafetyPlanner.run(plannerInput),
+        onStepCost: (tokens, cost) => {
+          totalTokens += tokens;
+          totalCost += cost;
+        },
       });
 
       // ---- Step 3: Work Order Generator ----
@@ -91,6 +102,10 @@ class MaintenanceWorkflowOrchestrator {
         stepOrder: 3,
         input: workOrderInput,
         fn: () => this.workOrderGenerator.run(workOrderInput),
+        onStepCost: (tokens, cost) => {
+          totalTokens += tokens;
+          totalCost += cost;
+        },
       });
 
       // ---- Approval Gate: the work order is a DRAFT until a human approves it ----
@@ -101,6 +116,9 @@ class MaintenanceWorkflowOrchestrator {
 
       await this.runRepository.updateRunStatus(runId, 'awaiting_approval');
 
+      // Persist run-level cost totals for FR-9 observability
+      await this.runRepository.updateRunCost(runId, { totalTokens, totalCost });
+
       return {
         runId,
         correlationId,
@@ -110,6 +128,8 @@ class MaintenanceWorkflowOrchestrator {
       };
     } catch (err) {
       await this.runRepository.updateRunStatus(runId, 'failed');
+      // Best-effort: persist whatever cost was accumulated before failure
+      await this.runRepository.updateRunCost(runId, { totalTokens, totalCost }).catch(() => {});
       return {
         runId,
         correlationId,
@@ -119,13 +139,17 @@ class MaintenanceWorkflowOrchestrator {
     }
   }
 
-  async _runStep({ runId, agentName, stepOrder, input, fn }) {
+  async _runStep({ runId, agentName, stepOrder, input, fn, onStepCost }) {
     try {
       const output = await withTimeout(
         retryWithBackoff(fn, { maxRetries: 2, isRetryable: isTransientError }),
         STEP_TIMEOUT_MS,
         agentName
       );
+
+      // Read token/cost metadata attached by the agent after schema.parse()
+      const tokensUsed = output.tokensUsed ?? 0;
+      const cost = output.cost ?? 0;
 
       await this.runRepository.recordAgentStep({
         runId,
@@ -134,7 +158,12 @@ class MaintenanceWorkflowOrchestrator {
         input,
         output,
         status: 'completed',
+        tokensUsed,
+        cost,
       });
+
+      // Notify the caller so run-level totals can be accumulated
+      if (onStepCost) onStepCost(tokensUsed, cost);
 
       return output;
     } catch (err) {
@@ -145,6 +174,8 @@ class MaintenanceWorkflowOrchestrator {
         input,
         status: 'failed',
         errorMessage: err.message,
+        tokensUsed: 0,
+        cost: 0,
       });
       throw err;
     }

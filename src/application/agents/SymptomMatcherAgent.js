@@ -58,7 +58,11 @@ class SymptomMatcherAgent {
       matchedChunkIds: fused.slice(0, 5).map((r) => r.id),
     };
 
-    return SymptomMatcherOutput.parse(output);
+    // SymptomMatcher uses only embed (no LLM completion), so no token cost.
+    // Attach zeros via Object.assign so the orchestrator receives a consistent
+    // { tokensUsed, cost } shape without touching agentSchemas.js.
+    const parsed = SymptomMatcherOutput.parse(output);
+    return Object.assign(parsed, { tokensUsed: 0, cost: 0 });
   }
 }
 

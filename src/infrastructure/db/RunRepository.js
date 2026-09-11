@@ -18,6 +18,41 @@ class RunRepository {
     );
   }
 
+  /**
+   * Persist aggregate token/cost totals on the run row (FR-9).
+   * Called by the orchestrator once per run (success or best-effort on failure).
+   */
+  async updateRunCost(runId, { totalTokens, totalCost }) {
+    await pool.query(
+      `UPDATE runs SET total_tokens = $1, total_cost = $2 WHERE id = $3`,
+      [totalTokens, totalCost, runId]
+    );
+  }
+
+  /**
+   * Return cost/token summary for a run — used by GET /runs/:runId/cost.
+   */
+  async getRunCost(runId) {
+    const result = await pool.query(
+      `SELECT id, status, workflow_type, total_tokens, total_cost, created_at, completed_at
+       FROM runs WHERE id = $1`,
+      [runId]
+    );
+    if (result.rows.length === 0) {
+      throw new Error(`Run not found: ${runId}`);
+    }
+    const row = result.rows[0];
+    return {
+      runId: row.id,
+      status: row.status,
+      workflowType: row.workflow_type,
+      totalTokens: row.total_tokens,
+      totalCost: row.total_cost,
+      createdAt: row.created_at,
+      completedAt: row.completed_at,
+    };
+  }
+
   async recordAgentStep({
     runId,
     agentName,
@@ -28,10 +63,15 @@ class RunRepository {
     errorMessage = null,
     toolsCalled = [],
     chunksUsed = [],
+    tokensUsed = 0,
+    cost = 0,
   }) {
     const result = await pool.query(
-      `INSERT INTO agent_steps (run_id, agent_name, step_order, input, output, tools_called, chunks_used, status, error_message, completed_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CASE WHEN $8 IN ('completed','failed') THEN now() ELSE NULL END)
+      `INSERT INTO agent_steps
+         (run_id, agent_name, step_order, input, output, tools_called, chunks_used,
+          tokens_used, cost, status, error_message, completed_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
+               CASE WHEN $10 IN ('completed','failed') THEN now() ELSE NULL END)
        RETURNING id`,
       [
         runId,
@@ -41,6 +81,8 @@ class RunRepository {
         output ? JSON.stringify(output) : null,
         JSON.stringify(toolsCalled),
         JSON.stringify(chunksUsed),
+        tokensUsed,
+        cost,
         status,
         errorMessage,
       ]

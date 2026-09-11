@@ -43,6 +43,21 @@ function createWorkflowRouter({ orchestrator, decideApproval, runRepository }) {
     }
   );
 
+  /**
+   * GET /runs/:runId/cost
+   * Returns the total token usage and approximate cost for a run.
+   * Protected by requireAuth — useful for FR-9 observability demos.
+   */
+  router.get('/runs/:runId/cost', requireAuth, async (req, res) => {
+    try {
+      const cost = await runRepository.getRunCost(req.params.runId);
+      res.json(cost);
+    } catch (err) {
+      const status = err.message.startsWith('Run not found') ? 404 : 500;
+      res.status(status).json({ error: err.message });
+    }
+  });
+
   return router;
 }
 

@@ -34,7 +34,10 @@ class WorkOrderGeneratorAgent {
       status: workOrder.status, // 'draft' — always, per the WorkOrder entity
     };
 
-    return WorkOrderGeneratorOutput.parse(output);
+    // WorkOrderGenerator makes no LLM calls — pure deterministic assembly.
+    // Attach zeros so the orchestrator receives a consistent { tokensUsed, cost } shape.
+    const parsed = WorkOrderGeneratorOutput.parse(output);
+    return Object.assign(parsed, { tokensUsed: 0, cost: 0 });
   }
 }
 
