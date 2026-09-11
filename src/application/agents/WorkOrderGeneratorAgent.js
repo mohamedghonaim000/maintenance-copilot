@@ -32,12 +32,11 @@ class WorkOrderGeneratorAgent {
       diagnosticSteps: workOrder.diagnosticSteps,
       safetyPrerequisites: workOrder.safetyPrerequisites,
       status: workOrder.status, // 'draft' — always, per the WorkOrder entity
+      tokensUsed: 0,
+      cost: 0,
     };
 
-    // WorkOrderGenerator makes no LLM calls — pure deterministic assembly.
-    // Attach zeros so the orchestrator receives a consistent { tokensUsed, cost } shape.
-    const parsed = WorkOrderGeneratorOutput.parse(output);
-    return Object.assign(parsed, { tokensUsed: 0, cost: 0 });
+    return WorkOrderGeneratorOutput.parse(output);
   }
 }
 

@@ -42,7 +42,7 @@ describe('DiagnosticSafetyPlannerAgent', () => {
     expect(agent.extractListSection(response, 'SAFETY PREREQUISITES:')).toEqual(['Wear PPE']);
   });
 
-  test('falls back to retrieved evidence when the model omits safety formatting', async () => {
+  test('throws when the model never produces a properly formatted safety prerequisites section after all retry attempts', async () => {
     const vectorSearchRepository = {
       searchByVector: jest.fn().mockResolvedValue([
         { id: 'vector-1', section: 'Safety', content: 'Wear PPE before servicing.' },
@@ -57,15 +57,15 @@ describe('DiagnosticSafetyPlannerAgent', () => {
     };
     const agent = new DiagnosticSafetyPlannerAgent(vectorSearchRepository, llmProvider, {
       timeoutMs: 1000,
+      maxFormatAttempts: 2,
     });
 
     await expect(agent.run({
       equipmentId: 'AC-450',
       manualVersion: '1.0',
       symptomDescription: 'unit will not start',
-    })).resolves.toMatchObject({
-      diagnosticSteps: ['Check the power supply.'],
-      safetyPrerequisites: ['Wear PPE before servicing.'],
-    });
+    })).rejects.toThrow(/Refusing to proceed/);
+
+    expect(llmProvider.complete).toHaveBeenCalledTimes(2);
   });
 });

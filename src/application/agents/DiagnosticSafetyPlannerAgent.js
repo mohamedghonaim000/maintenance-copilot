@@ -79,28 +79,15 @@ class DiagnosticSafetyPlannerAgent {
       input
     );
 
-    // Structure and validate output
     const output = {
       diagnosticSteps,
       safetyPrerequisites,
       sourceChunkIds: uniqueChunks.map((c) => c.id),
-      metadata: {
-        equipmentId: input.equipmentId,
-        manualVersion: input.manualVersion,
-        totalChunksRetrieved: uniqueChunks.length,
-        safetyChunksFound: safetyChunks.length,
-        diagnosticChunksFound: diagnosticChunks.length,
-      },
-    };
-
-    // Attach LLM usage metadata after Zod parse (Zod strips unknown keys during
-    // parse, so we use Object.assign to add observability fields without touching
-    // the contract schema in agentSchemas.js).
-    const parsed = DiagnosticSafetyPlannerOutput.parse(output);
-    return Object.assign(parsed, {
       tokensUsed: this._lastTokensUsed ?? 0,
       cost: this._lastCost ?? 0,
-    });
+    };
+
+    return DiagnosticSafetyPlannerOutput.parse(output);
   }
 
   /**
@@ -250,38 +237,10 @@ class DiagnosticSafetyPlannerAgent {
     }
 
     // If we exhausted attempts without success
-    const fallbackResponse = this.buildGroundedFallbackResponse(relevantChunks);
-    if (fallbackResponse) {
-      console.warn('Model response was not structured; using retrieved safety and diagnostic content.');
-      return fallbackResponse;
-    }
-
     throw new Error(
       `Model did not produce any safety prerequisites for ${input.equipmentId} after ${this.maxFormatAttempts} attempts, ` +
       `even though a safety section was retrieved. Refusing to proceed.`
     );
-  }
-
-  /**
-   * Build a deterministic response from retrieved evidence when the model
-   * cannot satisfy the required list format.
-   * @param {Array} relevantChunks - Retrieved diagnostic and safety chunks
-   * @returns {string|null} Structured fallback response or null
-   */
-  buildGroundedFallbackResponse(relevantChunks) {
-    const { diagnosticChunks, safetyChunks } = this.categorizeChunks(relevantChunks);
-    if (diagnosticChunks.length === 0 || safetyChunks.length === 0) {
-      return null;
-    }
-
-    const formatChunks = (chunks) => chunks
-      .map((chunk) => chunk.content?.trim())
-      .filter(Boolean)
-      .map((content) => `- ${content}`)
-      .join('\n');
-
-    return `DIAGNOSTIC STEPS:\n${formatChunks(diagnosticChunks)}\n\n` +
-      `SAFETY PREREQUISITES:\n${formatChunks(safetyChunks)}`;
   }
 
   /**
