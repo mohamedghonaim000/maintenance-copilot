@@ -1,0 +1,255 @@
+openapi: 3.0.3
+info:
+  title: Industrial Maintenance Copilot API
+  version: 1.0.0
+  description: >
+    RAG-based Q&A and multi-agent maintenance workflow API for the D5
+    (Industrial Field Maintenance) + T2 (Offline/Degraded Mode) project.
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Health
+  - name: Auth
+  - name: Ingestion
+  - name: Q&A
+  - name: Workflow
+
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Liveness check
+      responses:
+        '200':
+          description: Server is running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+
+  /ready:
+    get:
+      tags: [Health]
+      summary: Readiness check
+      responses:
+        '200':
+          description: Server is ready to accept traffic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ready }
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, role]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8 }
+                role: { type: string, enum: [technician, supervisor] }
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Missing or invalid fields
+        '409':
+          description: User already exists
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in and receive a JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200':
+          description: Authenticated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  role: { type: string }
+                  userId: { type: string, format: uuid }
+        '401':
+          description: Invalid credentials
+
+  /ingest:
+    post:
+      tags: [Ingestion]
+      summary: Ingest a document (.txt or .pdf) into the corpus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [filePath]
+              properties:
+                filePath: { type: string, example: ./sample-corpus/hp-200-manual.txt }
+                source: { type: string, example: api-upload }
+      responses:
+        '200':
+          description: Ingestion result per document version found in the file
+        '400':
+          description: filePath missing
+        '500':
+          description: Ingestion failed
+
+  /ask:
+    post:
+      tags: [Q&A]
+      summary: Ask a question, get a grounded answer with citations (non-streaming)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question]
+              properties:
+                question: { type: string }
+      responses:
+        '200':
+          description: Answer with citations, or a correct refusal if evidence is insufficient
+        '400':
+          description: question missing
+
+  /ask/stream:
+    get:
+      tags: [Q&A]
+      summary: Ask a question with Server-Sent Events streaming
+      parameters:
+        - name: question
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: >
+            text/event-stream. Emits events: `status` (progress
+            messages), `answer_chunk` (token-level text), `done`
+            (final citations), `error`.
+
+  /workflow/run:
+    post:
+      tags: [Workflow]
+      summary: Start a D5 maintenance workflow run (requires authentication)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [symptomDescription]
+              properties:
+                symptomDescription: { type: string }
+                sessionId: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Workflow result — status is one of "awaiting_approval" or "failed"
+        '401':
+          description: Missing or invalid token
+
+    /runs/{runId}/cost:
+    get:
+      tags: [Workflow]
+      summary: Get cost breakdown for a workflow run
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Cost breakdown for the run
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  runId: { type: string, format: uuid }
+                  totalTokens: { type: integer }
+                  totalCostUsd: { type: number }
+                  breakdown:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        agentName: { type: string }
+                        tokens: { type: integer }
+                        costUsd: { type: number }
+        '401':
+          description: Missing or invalid token
+        '404':
+          description: Run not found
+        '500':
+          description: Internal server error
+
+  /approvals/{approvalId}/decide:
+    post:
+      tags: [Workflow]
+      summary: Approve, reject, or edit-and-approve a pending work order (supervisor only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: approvalId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision:
+                  type: string
+                  enum: [approved, rejected, edited_and_approved]
+                comment: { type: string }
+                editedAction: { type: object }
+      responses:
+        '200':
+          description: Approval decision result
+        '400':
+          description: Invalid decision or approval not found
+        '401':
+          description: Missing or invalid token
+        '403':
+          description: User is not a supervisor
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
