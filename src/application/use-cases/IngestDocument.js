@@ -49,17 +49,25 @@ class IngestDocument {
       const equipmentId = extractEquipmentId(extracted.rawText);
       const existing = await this.documentRepository.findByContentHash(contentHash);
       if (existing) {
-        if (!existing.equipment_id && equipmentId) {
-          await this.documentRepository.updateEquipmentId(existing.id, equipmentId);
+        if (existing.status === "done") {
+          if (!existing.equipment_id && equipmentId) {
+            await this.documentRepository.updateEquipmentId(existing.id, equipmentId);
+          }
+
+          console.log(`Skipping duplicate: ${extracted.versionLabel || filePath}`);
+          results.push({
+            documentId: existing.id,
+            status: "skipped_duplicate",
+            version: extracted.versionLabel,
+          });
+          continue;
         }
 
-        console.log(`Skipping duplicate: ${extracted.versionLabel || filePath}`);
-        results.push({
-          documentId: existing.id,
-          status: "skipped_duplicate",
-          version: extracted.versionLabel,
-        });
-        continue;
+        // A failed or interrupted ingestion may have already stored chunks.
+        // Remove that incomplete document first; the FK cascade removes its
+        // chunks, then this run starts from a clean state.
+        console.log(`Retrying incomplete ingestion: ${extracted.versionLabel || filePath}`);
+        await this.documentRepository.deleteDocument(existing.id);
       }
 
       try {

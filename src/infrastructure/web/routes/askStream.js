@@ -112,7 +112,7 @@ function createAskStreamRouter({
       sendEvent('status', { message: 'Generating answer...' });
       const prompt = buildPrompt(question.trim(), fusedResults, history);
       let answer = '';
-      await llmProvider.completeStream(prompt, (tokenText) => {
+      const streamResult = await llmProvider.completeStream(prompt, (tokenText) => {
         answer += tokenText;
         sendEvent('answer_chunk', { text: tokenText });
       });
@@ -125,6 +125,20 @@ function createAskStreamRouter({
         runId,
         role: 'assistant',
         content: answer,
+      });
+      await runRepository.recordAgentStep({
+        runId,
+        agentName: 'QA',
+        stepOrder: 1,
+        input: { question: question.trim() },
+        output: { text: answer },
+        status: 'completed',
+        tokensUsed: streamResult.tokensUsed ?? 0,
+        cost: streamResult.cost ?? 0,
+      });
+      await runRepository.updateRunCost(runId, {
+        totalTokens: streamResult.tokensUsed ?? 0,
+        totalCost: streamResult.cost ?? 0,
       });
       await runRepository.updateRunStatus(runId, 'completed');
 
