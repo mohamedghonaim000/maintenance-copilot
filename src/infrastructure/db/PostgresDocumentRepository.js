@@ -36,6 +36,10 @@ class PostgresDocumentRepository extends DocumentRepository {
   return result.rows[0] || null;
 }
 
+  async deleteDocument(documentId) {
+    await pool.query(`DELETE FROM documents WHERE id = $1`, [documentId]);
+  }
+
   async updateEquipmentId(documentId, equipmentId) {
     await pool.query(
       `UPDATE documents SET equipment_id = $1 WHERE id = $2`,
