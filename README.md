@@ -27,19 +27,19 @@ and nothing else.
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
   installed and running
-- [Node.js](https://nodejs.org/) 20+ installed
-- [Ollama](https://ollama.com/download) installed (for the offline/T2
-  capability — see step 4 below)
+- [Node.js](https://nodejs.org/) 20+ installed (only needed for local
+  scripts like ingestion/tests — the app itself runs in Docker)
+- [Ollama](https://ollama.com/download) installed on your host machine
+  (for the offline/T2 capability — see the limitation note below)
 
-## ⚠️ Current packaging state (documented honestly)
+## ⚠️ Known limitation: Ollama and Docker
 
-The `docker-compose.yml` in this repo currently starts **only
-PostgreSQL + pgvector**. The Node.js application itself is run
-directly on the host via `npm start`, not yet as a container in the
-same compose file. A single `docker compose up` bringing up the entire
-system (app + database together) is a known gap, tracked in
-`docs/SYSTEM-DESIGN.md`'s gap table, not yet closed. The steps below
-reflect the actual current setup.
+`docker compose up --build` brings up both the application and the
+database together. However, the app **container** cannot reach an
+Ollama instance running directly on your host machine without extra
+network configuration — so the T2 offline fallback works when running
+the app via `npm start` on the host, but not from inside the container
+as currently configured. Tracked in `docs/SYSTEM-DESIGN.md`'s gap table.
 
 ---
 
@@ -53,24 +53,7 @@ cd maintenance-copilot
 npm install
 ```
 
-### 2. Start the database
-
-```bash
-docker compose up -d
-```
-
-This starts PostgreSQL 16 with the pgvector extension on port 5432.
-Verify it's running:
-
-```bash
-docker ps
-```
-
-You should see a container named `maintenance_copilot_db`.
-
-### 3. Configure environment variables
-
-Copy the example file and fill in your own values:
+### 2. Configure environment variables
 
 ```bash
 cp .env.example .env
@@ -78,6 +61,24 @@ cp .env.example .env
 
 See [Environment Variables](#environment-variables) below for what
 each one means and how to obtain it.
+
+### 3. Start everything
+
+```bash
+docker compose up --build
+```
+
+This builds the application image and starts both the API
+(`http://localhost:3000`) and PostgreSQL 16 with pgvector, waiting for
+the database healthcheck before starting the app.
+
+Verify both are running:
+
+```bash
+docker ps
+```
+
+You should see `maintenance_copilot_db` and `maintenance_copilot_app`.
 
 ### 4. Set up the local model (for offline/T2 mode)
 
@@ -89,7 +90,8 @@ ollama pull nomic-embed-text
 The first is the local text-generation model; the second is the local
 embedding model, deliberately chosen to output 768-dimension vectors
 matching the configured Gemini embedding dimension (see ADR-004 in
-`docs/ARCHITECTURE.md`).
+`docs/ARCHITECTURE.md`). See the known limitation above regarding
+Ollama reachability from inside the app container.
 
 ### 5. Run database migrations
 
@@ -112,15 +114,7 @@ This ingests every `.txt`/`.pdf` file in `sample-corpus/`. Check the
 printed summary — every document should show `status: "done"` (or
 `skipped_duplicate` if you re-run it).
 
-### 7. Start the server
-
-```bash
-npm start
-```
-
-The API is now running at `http://localhost:3000`.
-
-### 8. (Optional) Start the frontend
+### 7. (Optional) Start the frontend
 
 ```bash
 cd frontend
@@ -256,7 +250,13 @@ A numbered script showing every core capability:
 
 **`ECONNREFUSED` on database connection**
 Docker Desktop isn't running, or the container stopped. Run
-`docker compose up -d` again and check `docker ps`.
+`docker compose up --build` again and check `docker ps`.
+
+**Container name conflict (`Conflict. The container name "..." is already in use`)**
+A container from a previous run still exists. Run
+`docker compose down` and, if needed,
+`docker rm -f maintenance_copilot_db maintenance_copilot_app`, then
+retry `docker compose up --build`.
 
 **`Gemini failed... 429 Too Many Requests`**
 Gemini's free tier has a low daily/per-minute quota. This is expected
@@ -265,7 +265,8 @@ and the system automatically falls back to Ollama — this is not a bug.
 **Ollama errors (`ECONNREFUSED` on port 11434)**
 The Ollama application/service isn't running in the background. Start
 it from your OS's application launcher, or run `ollama serve` in a
-separate terminal.
+separate terminal. Also see the known Docker/Ollama networking
+limitation noted above.
 
 **A workflow run fails with "No safety prerequisites section
 found... (unknown)"**
@@ -280,6 +281,11 @@ re-ingestion resolves this.
 **"No chunks generated for document version"**
 The document's section headers don't match either supported format
 (`Section N: Title` or `N. Title`). See `src/infrastructure/parsers/TextChunker.js`.
+
+**A migration seems to be missing after resetting the database**
+Check `src/infrastructure/db/migrations/` for the full, current list
+of migration files and run them all, in numeric order — the set has
+grown over the project's development (currently 001 through 005).
 
 ---
 
