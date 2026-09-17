@@ -21,6 +21,10 @@ class DocumentRepository {
     throw new Error('DocumentRepository.findByContentHash() must be implemented');
   }
 
+  async deleteDocument(documentId) {
+    throw new Error('DocumentRepository.deleteDocument() must be implemented');
+  }
+
   async updateEquipmentId(documentId, equipmentId) {
     throw new Error('DocumentRepository.updateEquipmentId() must be implemented');
   }

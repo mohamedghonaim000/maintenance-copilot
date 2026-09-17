@@ -34,8 +34,17 @@ class RunRepository {
    */
   async getRunCost(runId) {
     const result = await pool.query(
-      `SELECT id, status, workflow_type, total_tokens, total_cost, created_at, completed_at
-       FROM runs WHERE id = $1`,
+      `SELECT r.id, r.status, r.workflow_type, r.total_tokens, r.total_cost,
+              r.created_at, r.completed_at,
+              COALESCE(json_agg(json_build_object(
+                'agentName', s.agent_name,
+                'tokens', s.tokens_used,
+                'costUsd', s.cost
+              ) ORDER BY s.step_order) FILTER (WHERE s.id IS NOT NULL), '[]') AS breakdown
+       FROM runs r
+       LEFT JOIN agent_steps s ON s.run_id = r.id AND s.status = 'completed'
+       WHERE r.id = $1
+       GROUP BY r.id`,
       [runId]
     );
     if (result.rows.length === 0) {
@@ -47,7 +56,8 @@ class RunRepository {
       status: row.status,
       workflowType: row.workflow_type,
       totalTokens: row.total_tokens,
-      totalCost: row.total_cost,
+      totalCostUsd: Number(row.total_cost ?? 0),
+      breakdown: row.breakdown,
       createdAt: row.created_at,
       completedAt: row.completed_at,
     };
