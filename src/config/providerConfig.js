@@ -97,20 +97,23 @@ function getLLMProvider() {
 
     async completeStream(prompt, onToken, options = {}) {
       if (process.env.FORCE_OFFLINE_MODE === "true") {
-        return getOllamaProvider().completeStream(prompt, onToken, options);
+        const result = await getOllamaProvider().completeStream(prompt, onToken, options);
+        return { ...result, providerUsed: "ollama", cost: computeCost(result.tokensUsed ?? 0, "ollama") };
       }
       try {
-        return await getGeminiProvider().completeStream(
+        const result = await getGeminiProvider().completeStream(
           prompt,
           onToken,
           options,
         );
+        return { ...result, providerUsed: "gemini", cost: computeCost(result.tokensUsed ?? 0, "gemini") };
       } catch (err) {
         console.warn(
           "[providerConfig] Gemini stream failed, falling back to Ollama:",
           sanitizeError(err),
         );
-        return getOllamaProvider().completeStream(prompt, onToken, options);
+        const result = await getOllamaProvider().completeStream(prompt, onToken, options);
+        return { ...result, providerUsed: "ollama", cost: computeCost(result.tokensUsed ?? 0, "ollama") };
       }
     },
 

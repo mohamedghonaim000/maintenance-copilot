@@ -33,6 +33,7 @@ class OllamaProvider extends LLMProvider {
   }
 
   let fullText = '';
+  let tokensUsed = 0;
   const decoder = new TextDecoder();
 
   for await (const chunk of response.body) {
@@ -43,10 +44,13 @@ class OllamaProvider extends LLMProvider {
         fullText += data.response;
         onToken(data.response);
       }
+      if (data.done) {
+        tokensUsed = (data.prompt_eval_count ?? 0) + (data.eval_count ?? 0);
+      }
     }
   }
 
-  return { text: fullText };
+  return { text: fullText, tokensUsed };
 }
 
   async embed(text) {
