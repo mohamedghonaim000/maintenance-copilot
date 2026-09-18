@@ -36,7 +36,7 @@ export function streamAsk({ question, sessionId, token }, handlers) {
         if (eventName === 'answer_chunk') handlers.onChunk?.(data.text);
         if (eventName === 'done') {
           handlers.onCitations?.(data.citations || []);
-          handlers.onDone?.();
+          handlers.onDone?.(data);
         }
         if (eventName === 'error') handlers.onError?.(data.message);
       });

@@ -11,7 +11,7 @@ export const useAskStore = create((set) => ({
   loadMessages: (messages) => set({
     messages: messages.reduce((turns, message) => {
       if (message.role === 'user') {
-        turns.push({ id: message.id, question: message.content, answerText: '', citations: [], error: null });
+        turns.push({ id: message.id, question: message.content, answerText: '', citations: [], error: null, cost: null, costLoading: false, costError: null });
       } else if (message.role === 'assistant' && turns.length > 0) {
         turns[turns.length - 1] = { ...turns[turns.length - 1], answerText: message.content };
       }
@@ -25,14 +25,18 @@ export const useAskStore = create((set) => ({
   // into it. This is the key fix: previous messages stay in the array
   // untouched, only the new one is being built up.
   startStreaming: (question) =>
-    set((state) => ({
+    (() => {
+      const messageId = `local-${Date.now()}-${Math.random()}`;
+      set((state) => ({
       isStreaming: true,
       statusMessage: '',
       messages: [
         ...state.messages,
-        { question, answerText: '', citations: [], error: null },
+        { id: messageId, question, answerText: '', citations: [], error: null, cost: null, costLoading: false, costError: null },
       ],
-    })),
+      }));
+      return messageId;
+    })(),
 
   // Appends a chunk to the LAST message only — the one currently streaming.
   appendChunk: (chunk) =>
@@ -56,7 +60,35 @@ export const useAskStore = create((set) => ({
 
   setStatusMessage: (statusMessage) => set({ statusMessage }),
 
+  setCostLoading: (messageId, costLoading) => set((state) => ({
+    messages: state.messages.map((message) =>
+      message.id === messageId ? { ...message, costLoading, costError: null } : message
+    ),
+  })),
+
+  setCost: (messageId, cost) => set((state) => ({
+    messages: state.messages.map((message) =>
+      message.id === messageId ? { ...message, cost, costLoading: false, costError: null } : message
+    ),
+  })),
+
+  setCostError: (messageId, costError) => set((state) => ({
+    messages: state.messages.map((message) =>
+      message.id === messageId ? { ...message, costLoading: false, costError } : message
+    ),
+  })),
+
   finishStreaming: () => set({ isStreaming: false }),
+
+  stopStreaming: () => set((state) => {
+    const lastMessage = state.messages[state.messages.length - 1];
+    const hasEmptyAnswer = lastMessage && !lastMessage.answerText && !lastMessage.error;
+    return {
+      messages: hasEmptyAnswer ? state.messages.slice(0, -1) : state.messages,
+      isStreaming: false,
+      statusMessage: '',
+    };
+  }),
 
   // Error also attaches to the last (current) message, not a global field
   setError: (error) =>
