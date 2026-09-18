@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchRunCost } from "../api/approvalsApi";
 import { runWorkflow } from "../api/workflowApi";
 import { useAuthStore } from "../store/useAuthStore";
 import { useAskStore } from "../store/useAskStore";
@@ -10,18 +11,36 @@ export default function WorkflowPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [cost, setCost] = useState(null);
+  const [costLoading, setCostLoading] = useState(false);
+  const [costError, setCostError] = useState(null);
   const token = useAuthStore((s) => s.token);
   const sessionId = useAskStore((s) => s.sessionId);
   const navigate = useNavigate();
   const setApproval = useApprovalsStore((s) => s.setApproval);
+
+  const runId = result?.runId ?? result?.run?.id ?? result?.id;
 
   async function submit(event) {
     event.preventDefault();
     if (!symptom.trim() || submitting) return;
     setSubmitting(true);
     setError(null);
+    setCost(null);
+    setCostLoading(false);
+    setCostError(null);
     try {
-      setResult(await runWorkflow(token, symptom.trim(), sessionId));
+      const workflowResult = await runWorkflow(token, symptom.trim(), sessionId);
+      setResult(workflowResult);
+
+      const workflowRunId = workflowResult?.runId ?? workflowResult?.run?.id ?? workflowResult?.id;
+      if (workflowRunId) {
+        setCostLoading(true);
+        fetchRunCost(token, workflowRunId)
+          .then(setCost)
+          .catch((requestError) => setCostError(requestError.message))
+          .finally(() => setCostLoading(false));
+      }
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -78,6 +97,56 @@ export default function WorkflowPage() {
               </p>
             </div>
           )}
+          <div className="mt-5 border-t border-border pt-4">
+            <h3 className="text-sm font-medium">Run cost</h3>
+            {costLoading && (
+              <p className="mt-2 text-sm text-text-muted">Loading cost breakdown…</p>
+            )}
+            {costError && (
+              <p className="mt-2 text-sm text-danger">{costError}</p>
+            )}
+            {!costLoading && !costError && cost && (
+              <>
+                <dl className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
+                  <div>
+                    <dt className="text-text-muted">Total tokens</dt>
+                    <dd className="mt-1 font-medium">{cost.totalTokens ?? 0}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-text-muted">Total cost</dt>
+                    <dd className="mt-1 font-medium">
+                      ${(cost.totalCostUsd ?? 0).toFixed(6)}
+                    </dd>
+                  </div>
+                </dl>
+                {cost.breakdown?.length > 0 && (
+                  <div className="mt-4 overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                      <thead className="text-xs text-text-muted">
+                        <tr>
+                          <th className="pb-2 font-medium">Agent</th>
+                          <th className="pb-2 font-medium">Tokens</th>
+                          <th className="pb-2 text-right font-medium">Cost</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {cost.breakdown.map((item, index) => (
+                          <tr key={`${item.agentName}-${index}`} className="border-t border-border">
+                            <td className="py-2">{item.agentName ?? "Unknown agent"}</td>
+                            <td className="py-2">{item.tokens ?? 0}</td>
+                            <td className="py-2 text-right">${(item.costUsd ?? 0).toFixed(6)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+            {!costLoading && !costError && !cost && !runId && (
+              <p className="mt-2 text-sm text-text-muted">Cost is unavailable for this run.</p>
+            )}
+          </div>
           {result.status === "awaiting_approval" && approvalId && (
             <button
               onClick={() => {
