@@ -14,3 +14,5 @@ export async function runWorkflow(token, symptom, sessionId) {
     throw new Error(getApiErrorMessage(error), { cause: error });
   }
 }
+
+
