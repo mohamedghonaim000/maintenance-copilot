@@ -33,6 +33,11 @@ class VectorSearchRepository {
       conditions.push(`c.document_id = $${params.length}`);
     }
 
+    if (options.equipmentId !== undefined) {
+      params.push(options.equipmentId);
+      conditions.push(`d.equipment_id = $${params.length}`);
+    }
+
     if (manualVersion !== undefined) {
       params.push(manualVersion);
       conditions.push(`d.manual_version = $${params.length}`);
@@ -99,6 +104,11 @@ class VectorSearchRepository {
     if (documentId !== undefined) {
       params.push(documentId);
       conditions.push(`c.document_id = $${params.length}`);
+    }
+
+    if (options.equipmentId !== undefined) {
+      params.push(options.equipmentId);
+      conditions.push(`d.equipment_id = $${params.length}`);
     }
 
     if (manualVersion !== undefined) {
