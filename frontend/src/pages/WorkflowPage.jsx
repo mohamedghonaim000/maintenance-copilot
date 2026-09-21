@@ -87,14 +87,57 @@ export default function WorkflowPage() {
             </span>
           </div>
           {workOrder && (
-            <div className="mt-4 text-sm space-y-3">
-              <p>
-                <span className="text-text-muted">Equipment:</span>{" "}
-                {workOrder.equipmentId ?? "—"}
-              </p>
-              <p className="whitespace-pre-wrap">
-                {workOrder.summary ?? workOrder.description}
-              </p>
+            <div className="mt-4 text-sm space-y-4">
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                <p>
+                  <span className="text-text-muted">Equipment:</span>{" "}
+                  {workOrder.equipmentId ?? "—"}
+                </p>
+                <p>
+                  <span className="text-text-muted">Manual version:</span>{" "}
+                  {workOrder.manualVersion ?? "—"}
+                </p>
+                <p>
+                  <span className="text-text-muted">Status:</span>{" "}
+                  <span className="rounded-full bg-accent-dim px-2 py-0.5 text-xs">
+                    {workOrder.status ?? "—"}
+                  </span>
+                </p>
+              </div>
+
+              {workOrder.safetyPrerequisites?.length > 0 && (
+                <div>
+                  <h3 className="font-medium text-danger flex items-center gap-1.5">
+                    <span>⚠</span> Safety prerequisites
+                  </h3>
+                  <ul className="mt-2 space-y-1.5 list-none">
+                    {workOrder.safetyPrerequisites.map((item, i) => (
+                      <li
+                        key={i}
+                        className="rounded-lg border border-danger/20 bg-danger/5 px-3 py-2 text-sm"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {workOrder.diagnosticSteps?.length > 0 && (
+                <div>
+                  <h3 className="font-medium text-accent">Diagnostic steps</h3>
+                  <ol className="mt-2 space-y-1.5 list-decimal list-inside">
+                    {workOrder.diagnosticSteps.map((step, i) => (
+                      <li
+                        key={i}
+                        className="rounded-lg border border-border bg-surface-hover px-3 py-2 text-sm"
+                      >
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
           )}
           <div className="mt-5 border-t border-border pt-4">

@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { retryWithBackoff, withTimeout } = require('./resilience');
 
 const MAX_ITERATIONS = 5;
-const STEP_TIMEOUT_MS = 30000;
+const STEP_TIMEOUT_MS = 120000;
 
 // Errors that indicate bad/insufficient input, not a transient failure —
 // retrying them wastes time and tokens without changing the outcome.

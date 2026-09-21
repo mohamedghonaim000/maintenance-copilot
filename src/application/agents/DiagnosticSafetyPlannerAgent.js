@@ -20,7 +20,7 @@ class DiagnosticSafetyPlannerAgent {
     this.vectorSearchRepository = vectorSearchRepository;
     this.llmProvider = llmProvider;
     this.maxFormatAttempts = options.maxFormatAttempts || 2;
-    this.timeoutMs = options.timeoutMs || 30000;
+    this.timeoutMs = options.timeoutMs || 110000;
     this.topK = options.topK || 10;
     this.embeddingCache = new Map();
   }
@@ -42,19 +42,28 @@ class DiagnosticSafetyPlannerAgent {
     const versionFilter = this.getVersionFilter(input.manualVersion);
 
     // Perform parallel retrieval
-    const [vectorResults, keywordResults] = await Promise.all([
+    const [vectorResults, keywordResults, safetyResults] = await Promise.all([
       this.vectorSearchRepository.searchByVector(embedding, {
         limit: this.topK,
+        equipmentId: input.equipmentId,
         manualVersion: versionFilter,
       }),
       this.vectorSearchRepository.searchByKeyword(input.symptomDescription, {
         limit: this.topK,
+        equipmentId: input.equipmentId,
+        manualVersion: versionFilter,
+      }),
+      this.vectorSearchRepository.searchByKeyword("safety prerequisites warning caution danger hazard", {
+        limit: 5,
+        equipmentId: input.equipmentId,
         manualVersion: versionFilter,
       }),
     ]);
 
     // Merge and deduplicate results
-    const uniqueChunks = this.mergeAndDeduplicateResults(vectorResults, keywordResults);
+    const allResults = [...vectorResults, ...keywordResults, ...safetyResults];
+    const uniqueById = new Map(allResults.map((r) => [r.id, r]));
+    const uniqueChunks = [...uniqueById.values()];
 
     // Categorize chunks by section type
     const { diagnosticChunks, safetyChunks } = this.categorizeChunks(uniqueChunks);
@@ -130,18 +139,6 @@ class DiagnosticSafetyPlannerAgent {
       this.embeddingCache.set(cacheKey, embedding);
     }
     return this.embeddingCache.get(cacheKey);
-  }
-
-  /**
-   * Merge and deduplicate results from vector and keyword search
-   * @param {Array} vectorResults - Results from vector search
-   * @param {Array} keywordResults - Results from keyword search
-   * @returns {Array} Deduplicated results
-   */
-  mergeAndDeduplicateResults(vectorResults, keywordResults) {
-    const allResults = [...vectorResults, ...keywordResults];
-    const uniqueById = new Map(allResults.map((r) => [r.id, r]));
-    return [...uniqueById.values()];
   }
 
   /**

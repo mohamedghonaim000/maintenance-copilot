@@ -18,7 +18,8 @@ class OllamaProvider extends LLMProvider {
       throw new Error(`Ollama request failed: ${response.status}`);
     }
     const data = await response.json();
-    return { text: data.response, tokensUsed: data.eval_count ?? 0 };
+    const tokensUsed = (data.prompt_eval_count ?? 0) + (data.eval_count ?? 0);
+    return { text: data.response, tokensUsed };
   }
 
   async completeStream(prompt, onToken) {
