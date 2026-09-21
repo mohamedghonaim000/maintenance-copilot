@@ -1,0 +1,193 @@
+DOC-26
+DOC_26_LT-480_Overhaul_Procedure.md | 5 pages
+========================================================================
+
+DOCUMENT TITLE: Pedestal Grinding Machine — Overhaul Procedure
+EQUIPMENT: LT-480 Pedestal Grinding Machine
+DOCUMENT VERSION: v1.1
+DOCUMENT TYPE: Synthetic Training Document
+
+Section 1: Equipment Overview
+
+The LT-480 Pedestal Grinding Machine dresses and finishes workpieces and tool bits in the workshop toolroom. It is designed for continuous duty in a ventilated industrial environment and is rated for 3 kW at its nominal operating point.
+
+An equipment file is kept at the control room containing the as-built drawings, previous maintenance records, and the modification log for the LT-480.
+
+The drive train consists of a prime mover, a coupling or transmission element, and the working element of the machine. Each element contributes stored energy that must be controlled before work begins.
+
+Plant personnel interact with the LT-480 mainly during routine rounds, preventive maintenance, and corrective interventions. This document standardizes those activities.
+
+The unit operates at 2850 rpm wheel under normal load conditions. Operating outside the envelope defined in Section 2 accelerates wear on bearings, seals, and drive components.
+
+The LT-480 forms part of the Machining group in the plant equipment register under asset tag LT-480-A. Its failure can interrupt the associated process train.
+
+Section 2: Technical Specifications
+
+| Parameter | Value |
+|---|---|
+| Asset tag                   | LT-480-A |
+| Equipment class             | Machining |
+| Nominal operating point     | 2850 rpm wheel |
+| Rated power / duty          | 3 kW, continuous duty |
+| Supply                      | 400 V / 3-phase / 50 Hz (where applicable) |
+| Ambient range               | -10 °C to +40 °C |
+| Protection / mounting       | IP55 enclosure, rigid skid mounting |
+| Handled medium              | grinding wheel |
+| Bearing service life (L10h) | 40 000 h under rated conditions |
+| Noise emission              | < 75 dB(A) at 1 m under rated load |
+
+Values in this table are the reference baseline for all diagnostic comparisons in this document.
+
+Section 3: Safety Prerequisites
+
+1. Barricade the work area and post a sign when guards or safety devices are removed.
+2. Never bypass, jumper, or defeat an interlock, guard switch, or protective device.
+3. Wear safety glasses, hearing protection, gloves, and safety shoes while working in the vicinity of the equipment.
+4. Confirm fire watch and hot-work permit requirements before any grinding, welding, or flame cutting nearby.
+5. Isolate all energy sources feeding the LT-480 and apply lockout/tagout per site procedure before accessing the equipment.
+6. Use calibrated lifting equipment for components above 25 kg and follow rigging plan for heavy lifts.
+
+Section 4: Diagnostic Procedure
+
+1. Check instrumentation readings against calibrated test instruments where the installed gauge is suspected.
+2. Measure motor current on all phases and compare with the rated value; a persistent imbalance above 5 percent requires investigation.
+3. Review the shift log and trend data for drifting parameters that preceded the current condition.
+4. Check mounting hardware, foundation bolts, and hold-down clamps for looseness or fretting marks.
+5. Observe the equipment during a full operating cycle and compare speed, flow, pressure, and current against the expected values in Section 2.
+6. Inspect belts, couplings, and drive elements for glazing, cracking, misalignment, or abnormal wear patterns.
+
+Section 5: Maintenance Procedure
+
+1. Renew lubricant according to the schedule in Section 5, and verify the lubricant type against the specification table.
+2. Function-test interlocks, sensors, and protective devices after any intervention that disturbs them.
+3. Clean the work area, remove tools and consumables, and dispose of waste lubricant and parts per site procedure.
+4. Replace worn seals, gaskets, and O-rings; pressure-test or leak-check the reassembled unit before return to service.
+5. Record all findings, measurements, and replaced parts in the maintenance management system before closing the work order.
+6. Reinstall guards and safety devices, confirm the area is clear, and perform a controlled restart while monitoring current, vibration, and temperature.
+7. Inspect the working element for cracks, deformation, imbalance, or foreign-object damage; replace damaged components.
+
+Section 6: Common Failure Modes
+
+Imbalance develops from material buildup, erosion, or loss of rotating mass. Vibration spectra showing a dominant 1× running speed component point to imbalance or misalignment.
+
+Electrical failures are frequently preceded by elevated current, hot connection points, or insulation odor. Infrared scans during normal operation are an effective screening tool.
+
+Bearing-related failures account for the largest share of unplanned interventions on rotating equipment of this class. Contributing factors include contamination ingress, lubricant degradation, misalignment, and overload.
+
+Section 7: Troubleshooting Guide
+
+| Symptom | Probable Causes | Recommended Action |
+|---|---|---|
+| Corrosion or coating damage | Aggressive environment, coating breakdown, water ingress | Assess extent; repair coating; improve enclosure sealing |
+| Drive element slipping or glazing | Incorrect tension, contamination, pulley wear | Adjust tension; clean or replace element; inspect pulleys |
+| Overheating | Overloading, blocked ventilation, insufficient lubricant, high ambient | Reduce load; clean openings; check lubricant; verify ambient |
+| Erratic instrument readings | Sensor drift, wiring fault, moisture ingress | Calibrate sensor; inspect wiring and junctions |
+| Unusual odor or smoke | Insulation overheating, lubricant breakdown, friction contact | Stop immediately; investigate before restart |
+| Premature bearing failure | Contamination, wrong lubricant, misalignment, overload | Identify root cause; correct lubrication and alignment |
+| Pressure / flow instability | Cavitation risk, control instability, partial blockage | Verify suction conditions; tune controls; inspect passages |
+| Abnormal noise during operation | Bearing damage, rubbing contact, lubricant starvation | Stop unit; inspect bearings and clearances; re-lubricate |
+
+Section 8: Inspection and Records
+
+Inspection findings shall be recorded in the CMMS against asset tag LT-480-A. Minimum recorded data: date, inspector, operating hours, measured parameters, parts replaced, and next due date. Records are retained for the life of the asset plus five years.
+
+Section 9: Standard Work Checklist
+
+[ ] Work permit and isolation certificate issued and signed
+[ ] LOTO applied at all identified energy sources
+[ ] Zero energy state verified by test-before-touch
+[ ] PPE worn and in date; task-specific PPE confirmed
+[ ] Guards removed, tagged, and stored safely
+[ ] Components inspected per Section 4 steps
+[ ] Fasteners re-torqued to specified values
+[ ] Lubricant renewed and type verified
+[ ] Guards and safety devices reinstalled
+[ ] Interlocks and protective devices function-tested
+[ ] Area cleaned; tools and parts accounted for
+[ ] Restart performed under controlled conditions
+[ ] Parameters (current, vibration, temperature) recorded
+[ ] Work order closed with findings in CMMS
+
+Section 11: Lubrication Requirements
+
+Record every lubrication event with lubricant batch number in the CMMS to support warranty and failure analysis.
+
+Verify compatibility before mixing lubricants. When changing lubricant type, flush the cavity and renew seals.
+
+Over-greasing is a common cause of seal failure and overheating. Apply the quantity specified in the table and purge old grease through the relief port.
+
+Lubrication intervals assume clean operating conditions and rated load. Halve the interval in dusty, hot, or humid environments.
+
+Section 12: Operating Limits and Precautions
+
+Operating the LT-480 above its rated point reduces component life exponentially; a 10 percent overload can halve bearing life.
+
+Monitor the trend of the parameters in Section 2 rather than absolute alarms alone; slow drift gives early warning of developing faults.
+
+Frequent starts and stops stress the drive train. Allow the minimum cooldown or run-up interval specified before re-energizing.
+
+Do not operate with guards removed, interlocks defeated, or known leaks unattended.
+
+Section 13: General Workmanship Notes
+
+Communication guidance: Hand over open findings to the next shift in writing, including the isolation status and any parts on order.
+
+Measurement guidance: Record ambient conditions together with equipment readings so that comparisons across seasons remain meaningful.
+
+General guidance: Always begin an intervention with a review of the equipment history. The last three work orders often reveal a pattern that isolates the current fault faster than any single measurement.
+
+Housekeeping guidance: Dust and debris are both a fire load and a heat-insulating layer. Keep the equipment surroundings clean as a standing condition, not a periodic task.
+
+Quality guidance: Use only parts listed in the spare parts reference. Substitute parts require engineering approval before installation.
+
+Appendix A: Fastener Torque Reference
+
+| Fastener size | Property class | Torque (dry) | Torque (lightly oiled) |
+|---|---|---|---|
+| M8 | 8.8 | 24 N·m | 20 N·m |
+| M10 | 8.8 | 47 N·m | 39 N·m |
+| M12 | 8.8 | 82 N·m | 68 N·m |
+| M16 | 8.8 | 200 N·m | 165 N·m |
+| M20 | 8.8 | 390 N·m | 320 N·m |
+| M24 | 8.8 | 670 N·m | 560 N·m |
+
+Appendix B: Preventive Maintenance Schedule
+
+| Task | Frequency | Skill | Est. duration |
+|---|---|---|---|
+| Visual round and parameter check | Weekly | Operator | 15 min |
+| Cleaning of guards, openings, and surroundings | Monthly | Operator | 45 min |
+| Lubrication service | Quarterly | Technician | 60 min |
+| Detailed inspection and fastener check | Semi-annual | Technician | 3 h |
+| Alignment and drive element check | Annual | Technician | 4 h |
+| Full overhaul assessment | 3-yearly | Senior technician | 1 day |
+
+Appendix C: Synthetic Case Studies
+
+Case study (synthetic): A unit tripped repeatedly on overload. The driven element was binding after a repair left a spacer mispositioned. Correct reassembly and a controlled restart confirmed normal current draw.
+
+Case study (synthetic): Elevated current on one phase was traced to a terminal connection resistance of 4 mΩ versus the expected 0.5 mΩ. Thermal imaging during normal operation located the hot joint; re-termination resolved the imbalance.
+
+Case study (synthetic): A similar unit in the corpus fleet showed rising 1X vibration over six weeks. Investigation found foundation bolt looseness from thermal cycling after a process upset. Re-torquing to specification restored baseline vibration without part replacement.
+
+Appendix D: Knowledge Check (Synthetic)
+
+Q5. What records are mandatory after maintenance? — A: Date, inspector, hours, measured parameters, parts replaced, next due date in the CMMS.
+Q2. What does a dominant 1X vibration component typically indicate? — A: Imbalance or misalignment of the rotating element.
+Q3. Why is trend monitoring preferred over absolute alarm limits? — A: Slow drift reveals developing faults before alarm thresholds are crossed.
+Q4. State the test-before-touch rule. — A: After isolation, attempt start and test for absence of energy before touching the equipment.
+
+Appendix E: Document Control
+
+Revision history: v1.0 — initial issue of this synthetic training document for the LT-480 equipment class.
+This document is part of a synthetic corpus generated for training and evaluation purposes. It contains no real personal data and no proprietary site information.
+All equipment designations, asset tags, and parameter values are fictional. Any resemblance to actual installations is coincidental.
+
+Section 10: Definitions and Abbreviations
+
+- **CMMS**: Computerized Maintenance Management System for work orders and history.
+- **PM**: Preventive Maintenance task performed on schedule.
+- **1X**: Vibration component at running rotational frequency.
+- **LOTO**: Lockout/Tagout — the control of hazardous energy procedure.
+- **PPE**: Personal Protective Equipment required for the task.
+- **NPSH**: Net Positive Suction Head, a pump suction condition parameter.

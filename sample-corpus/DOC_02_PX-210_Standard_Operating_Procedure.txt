@@ -1,0 +1,193 @@
+DOC-02
+DOC_02_PX-210_Standard_Operating_Procedure.md | 5 pages
+========================================================================
+
+DOCUMENT TITLE: Centrifugal Process Pump — Standard Operating Procedure
+EQUIPMENT: PX-210 Centrifugal Process Pump
+DOCUMENT VERSION: v1.1
+DOCUMENT TYPE: Synthetic Training Document
+
+Section 1: Equipment Overview
+
+The PX-210 forms part of the Fluid Transfer group in the plant equipment register under asset tag PX-210-A. Its failure can interrupt the associated process train.
+
+The equipment was selected for the duty point described in the process datasheet. Any change to flow, pressure, speed, or handled medium invalidates the assumptions in this document.
+
+The PX-210 is installed on a rigid fabricated skid with anchoring bolts and isolation where specified. Adjacent clearances must allow safe access for inspection and removal of the guard or cover.
+
+The unit operates at 2950 rpm under normal load conditions. Operating outside the envelope defined in Section 2 accelerates wear on bearings, seals, and drive components.
+
+The PX-210 Centrifugal Process Pump moves process fluid from the supply tank through the distribution header to downstream consumers. It is designed for continuous duty in a ventilated industrial environment and is rated for 22 kW at its nominal operating point.
+
+The drive train consists of a prime mover, a coupling or transmission element, and the working element of the machine. Each element contributes stored energy that must be controlled before work begins.
+
+Section 2: Technical Specifications
+
+| Parameter | Value |
+|---|---|
+| Asset tag                   | PX-210-A |
+| Equipment class             | Fluid Transfer |
+| Nominal operating point     | 2950 rpm |
+| Rated power / duty          | 22 kW, continuous duty |
+| Supply                      | 400 V / 3-phase / 50 Hz (where applicable) |
+| Ambient range               | -10 °C to +40 °C |
+| Protection / mounting       | IP55 enclosure, rigid skid mounting |
+| Handled medium              | process fluid |
+| Bearing service life (L10h) | 40 000 h under rated conditions |
+| Noise emission              | < 75 dB(A) at 1 m under rated load |
+
+Values in this table are the reference baseline for all diagnostic comparisons in this document.
+
+Section 3: Safety Prerequisites
+
+1. Use calibrated lifting equipment for components above 25 kg and follow rigging plan for heavy lifts.
+2. A second qualified person must be present for work involving pressurized line or rotating shaft.
+3. Confirm the working element and shaft are completely stationary before reaching through any opening or removing any guard.
+4. Never bypass, jumper, or defeat an interlock, guard switch, or protective device.
+5. Confirm fire watch and hot-work permit requirements before any grinding, welding, or flame cutting nearby.
+6. Barricade the work area and post a sign when guards or safety devices are removed.
+
+Section 4: Diagnostic Procedure
+
+1. Check mounting hardware, foundation bolts, and hold-down clamps for looseness or fretting marks.
+2. Listen for bearing noise, imbalance, rubbing, or irregular knocking while the machine is running under load.
+3. Inspect belts, couplings, and drive elements for glazing, cracking, misalignment, or abnormal wear patterns.
+4. Review the shift log and trend data for drifting parameters that preceded the current condition.
+5. Verify that lubricant levels are within the sight glass marks and that lubricant color is normal.
+6. Perform a controlled stop and confirm that coast-down time is consistent with historical values.
+
+Section 5: Maintenance Procedure
+
+1. Examine bearings, bushings, and mounts for wear, looseness, or excessive movement; measure and record clearances.
+2. Replace worn seals, gaskets, and O-rings; pressure-test or leak-check the reassembled unit before return to service.
+3. Renew lubricant according to the schedule in Section 5, and verify the lubricant type against the specification table.
+4. Verify alignment between driver and driven elements using the specified tolerance limits.
+5. Isolate electrical power, lock out the disconnect, and tag the isolation point before any physical work.
+6. Clean the work area, remove tools and consumables, and dispose of waste lubricant and parts per site procedure.
+7. Function-test interlocks, sensors, and protective devices after any intervention that disturbs them.
+
+Section 6: Common Failure Modes
+
+Bearing-related failures account for the largest share of unplanned interventions on rotating equipment of this class. Contributing factors include contamination ingress, lubricant degradation, misalignment, and overload.
+
+Imbalance develops from material buildup, erosion, or loss of rotating mass. Vibration spectra showing a dominant 1× running speed component point to imbalance or misalignment.
+
+Electrical failures are frequently preceded by elevated current, hot connection points, or insulation odor. Infrared scans during normal operation are an effective screening tool.
+
+Section 7: Troubleshooting Guide
+
+| Symptom | Probable Causes | Recommended Action |
+|---|---|---|
+| Drive element slipping or glazing | Incorrect tension, contamination, pulley wear | Adjust tension; clean or replace element; inspect pulleys |
+| Abnormal noise during operation | Bearing damage, rubbing contact, lubricant starvation | Stop unit; inspect bearings and clearances; re-lubricate |
+| Leakage at seals or joints | Worn seals, loose fasteners, gasket damage, thermal cycling | Replace seals; re-torque to spec; renew gaskets |
+| Reduced output / performance | Worn working element, internal leakage, blocked passage, speed drift | Inspect element; check internal clearances; clean passages |
+| Unusual odor or smoke | Insulation overheating, lubricant breakdown, friction contact | Stop immediately; investigate before restart |
+| Frequent protective trips | Relay settings, genuine overload, instrumentation fault | Review trip records; test relay; verify instrument calibration |
+| Overheating | Overloading, blocked ventilation, insufficient lubricant, high ambient | Reduce load; clean openings; check lubricant; verify ambient |
+| Erratic instrument readings | Sensor drift, wiring fault, moisture ingress | Calibrate sensor; inspect wiring and junctions |
+
+Section 8: Inspection and Records
+
+Inspection findings shall be recorded in the CMMS against asset tag PX-210-A. Minimum recorded data: date, inspector, operating hours, measured parameters, parts replaced, and next due date. Records are retained for the life of the asset plus five years.
+
+Section 9: Standard Work Checklist
+
+[ ] Work permit and isolation certificate issued and signed
+[ ] LOTO applied at all identified energy sources
+[ ] Zero energy state verified by test-before-touch
+[ ] PPE worn and in date; task-specific PPE confirmed
+[ ] Guards removed, tagged, and stored safely
+[ ] Components inspected per Section 4 steps
+[ ] Fasteners re-torqued to specified values
+[ ] Lubricant renewed and type verified
+[ ] Guards and safety devices reinstalled
+[ ] Interlocks and protective devices function-tested
+[ ] Area cleaned; tools and parts accounted for
+[ ] Restart performed under controlled conditions
+[ ] Parameters (current, vibration, temperature) recorded
+[ ] Work order closed with findings in CMMS
+
+Section 11: Lubrication Requirements
+
+Lubrication intervals assume clean operating conditions and rated load. Halve the interval in dusty, hot, or humid environments.
+
+Over-greasing is a common cause of seal failure and overheating. Apply the quantity specified in the table and purge old grease through the relief port.
+
+Record every lubrication event with lubricant batch number in the CMMS to support warranty and failure analysis.
+
+Verify compatibility before mixing lubricants. When changing lubricant type, flush the cavity and renew seals.
+
+Section 12: Operating Limits and Precautions
+
+Do not operate with guards removed, interlocks defeated, or known leaks unattended.
+
+Frequent starts and stops stress the drive train. Allow the minimum cooldown or run-up interval specified before re-energizing.
+
+Operating the PX-210 above its rated point reduces component life exponentially; a 10 percent overload can halve bearing life.
+
+Monitor the trend of the parameters in Section 2 rather than absolute alarms alone; slow drift gives early warning of developing faults.
+
+Section 13: General Workmanship Notes
+
+Measurement guidance: Record ambient conditions together with equipment readings so that comparisons across seasons remain meaningful.
+
+Housekeeping guidance: Dust and debris are both a fire load and a heat-insulating layer. Keep the equipment surroundings clean as a standing condition, not a periodic task.
+
+General guidance: Always begin an intervention with a review of the equipment history. The last three work orders often reveal a pattern that isolates the current fault faster than any single measurement.
+
+Communication guidance: Hand over open findings to the next shift in writing, including the isolation status and any parts on order.
+
+Quality guidance: Use only parts listed in the spare parts reference. Substitute parts require engineering approval before installation.
+
+Appendix A: Fastener Torque Reference
+
+| Fastener size | Property class | Torque (dry) | Torque (lightly oiled) |
+|---|---|---|---|
+| M8 | 8.8 | 24 N·m | 20 N·m |
+| M10 | 8.8 | 47 N·m | 39 N·m |
+| M12 | 8.8 | 82 N·m | 68 N·m |
+| M16 | 8.8 | 200 N·m | 165 N·m |
+| M20 | 8.8 | 390 N·m | 320 N·m |
+| M24 | 8.8 | 670 N·m | 560 N·m |
+
+Appendix B: Preventive Maintenance Schedule
+
+| Task | Frequency | Skill | Est. duration |
+|---|---|---|---|
+| Visual round and parameter check | Weekly | Operator | 15 min |
+| Cleaning of guards, openings, and surroundings | Monthly | Operator | 45 min |
+| Lubrication service | Quarterly | Technician | 60 min |
+| Detailed inspection and fastener check | Semi-annual | Technician | 3 h |
+| Alignment and drive element check | Annual | Technician | 4 h |
+| Full overhaul assessment | 3-yearly | Senior technician | 1 day |
+
+Appendix C: Synthetic Case Studies
+
+Case study (synthetic): Elevated current on one phase was traced to a terminal connection resistance of 4 mΩ versus the expected 0.5 mΩ. Thermal imaging during normal operation located the hot joint; re-termination resolved the imbalance.
+
+Case study (synthetic): A unit tripped repeatedly on overload. The driven element was binding after a repair left a spacer mispositioned. Correct reassembly and a controlled restart confirmed normal current draw.
+
+Case study (synthetic): Recurring seal leaks were found to follow a lubricant change. The replacement lubricant was incompatible with the elastomer, causing swelling. Restoring the specified lubricant and renewing seals eliminated the leaks.
+
+Appendix D: Knowledge Check (Synthetic)
+
+Q4. State the test-before-touch rule. — A: After isolation, attempt start and test for absence of energy before touching the equipment.
+Q2. What does a dominant 1X vibration component typically indicate? — A: Imbalance or misalignment of the rotating element.
+Q5. What records are mandatory after maintenance? — A: Date, inspector, hours, measured parameters, parts replaced, next due date in the CMMS.
+Q3. Why is trend monitoring preferred over absolute alarm limits? — A: Slow drift reveals developing faults before alarm thresholds are crossed.
+
+Appendix E: Document Control
+
+Revision history: v1.0 — initial issue of this synthetic training document for the PX-210 equipment class.
+This document is part of a synthetic corpus generated for training and evaluation purposes. It contains no real personal data and no proprietary site information.
+All equipment designations, asset tags, and parameter values are fictional. Any resemblance to actual installations is coincidental.
+
+Section 10: Definitions and Abbreviations
+
+- **PPE**: Personal Protective Equipment required for the task.
+- **NPSH**: Net Positive Suction Head, a pump suction condition parameter.
+- **1X**: Vibration component at running rotational frequency.
+- **MTBF**: Mean Time Between Failures, a reliability statistic.
+- **IR**: Infrared thermography for non-contact temperature screening.
+- **PM**: Preventive Maintenance task performed on schedule.

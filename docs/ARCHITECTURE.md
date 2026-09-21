@@ -271,18 +271,28 @@ erDiagram
     RUNS ||--o| WORK_ORDERS : "may produce"
 
     APPROVALS ||--o| WORK_ORDERS : finalizes
-
     USERS {
         uuid id PK
         text email
         text password_hash
         text role
     }
+
     SESSIONS {
         uuid id PK
         uuid user_id FK
         text title
     }
+
+    MESSAGES {
+        uuid id PK
+        uuid session_id FK
+        uuid run_id FK
+        text role
+        text content
+        timestamptz created_at
+    }
+
     DOCUMENTS {
         uuid id PK
         text title
@@ -291,6 +301,7 @@ erDiagram
         text content_hash
         text status
     }
+
     CHUNKS {
         uuid id PK
         uuid document_id FK
@@ -299,6 +310,7 @@ erDiagram
         vector embedding
         tsvector search_vector
     }
+
     RUNS {
         uuid id PK
         uuid session_id FK
@@ -309,6 +321,7 @@ erDiagram
         numeric total_cost
         int total_tokens
     }
+
     AGENT_STEPS {
         uuid id PK
         uuid run_id FK
@@ -320,6 +333,7 @@ erDiagram
         numeric cost
         text status
     }
+
     APPROVALS {
         uuid id PK
         uuid run_id FK
@@ -328,6 +342,7 @@ erDiagram
         jsonb final_action
         uuid approved_by FK
     }
+
     WORK_ORDERS {
         uuid id PK
         uuid run_id FK
@@ -344,49 +359,49 @@ erDiagram
 ## 8. Layer Dependency Diagram (Hexagonal Architecture)
 
 ```mermaid
-flowchart TB
-    subgraph Domain["domain/ — zero external imports"]
-        D1[WorkOrder entity]
-        D2[Domain errors]
-    end
+flowchart TB 
+    subgraph Domain["domain/ — zero external imports"] 
+        D1[WorkOrder entity] 
+        D2[Domain errors] 
+    end 
 
-    subgraph Application["application/ — imports domain/ and ports/ only"]
-        A1[Use cases]
-        A2[Agents]
-        A3[Orchestrator]
-        A4[Zod contracts]
-    end
+    subgraph Application["application/ — imports domain/ and ports/ only"] 
+        A1[Use cases] 
+        A2[Agents] 
+        A3[Orchestrator] 
+        A4[Zod contracts] 
+    end 
 
-    subgraph Ports["ports/ — interfaces only, no implementation"]
-        P1[LLMProvider]
-        P2[DocumentRepository]
-    end
+    subgraph Ports["ports/ — interfaces only, no implementation"] 
+        P1[LLMProvider] 
+        P2[DocumentRepository] 
+    end 
 
-    subgraph Infrastructure["infrastructure/ — the only layer allowed external SDKs"]
-        I1[GeminiProvider / OllamaProvider]
-        I2[Postgres repositories]
-        I3[Express routes/middleware]
-    end
+    subgraph Infrastructure["infrastructure/ — the only layer allowed external SDKs"] 
+        I1[GeminiProvider / OllamaProvider] 
+        I2[Postgres repositories] 
+        I3[Express routes/middleware] 
+    end 
 
-    subgraph Config["config/ — composition root"]
-        C1[providerConfig.js]
-        C2[compositionRoot.js]
-    end
+    subgraph Config["config/ — composition root"] 
+        C1[providerConfig.js] 
+        C2[compositionRoot.js] 
+    end 
 
-    Application --> Domain
-    Application --> Ports
-    Infrastructure -.implements.-> Ports
-    Config --> Ports
-    Config --> Infrastructure
-    Config --> Application
-    Infrastructure -.never imports.-> Application
-    Infrastructure -.never imports.-> Domain
+    Application --> Domain 
+    Application --> Ports 
+    Infrastructure -. "implements" .-> Ports 
+    Config --> Ports 
+    Config --> Infrastructure 
+    Config --> Application 
+    Infrastructure -. "never imports" .-> Application 
+    Infrastructure -. "never imports" .-> Domain 
 
-    style Domain fill:#1f3a2a
-    style Application fill:#1f2f3a
-    style Ports fill:#3a3a1f
-    style Infrastructure fill:#3a1f2a
-    style Config fill:#2a1f3a
+    style Domain fill:#1f3a2a,stroke:#52b788,stroke-width:2px 
+    style Application fill:#1f2f3a,stroke:#457b9d,stroke-width:2px 
+    style Ports fill:#3a3a1f,stroke:#d4af37,stroke-width:2px 
+    style Infrastructure fill:#3a1f2a,stroke:#e63946,stroke-width:2px 
+    style Config fill:#2a1f3a,stroke:#9d4edd,stroke-width:2px
 ```
 
 **Acceptance test this diagram supports:** swapping `GeminiProvider` for

@@ -1,0 +1,193 @@
+DOC-28
+DOC_28_EF-170_Startup_and_Shutdown_Procedure.md | 5 pages
+========================================================================
+
+DOCUMENT TITLE: Dust Extraction Fan — Startup and Shutdown Procedure
+EQUIPMENT: EF-170 Dust Extraction Fan
+DOCUMENT VERSION: v1.2
+DOCUMENT TYPE: Synthetic Training Document
+
+Section 1: Equipment Overview
+
+The equipment was selected for the duty point described in the process datasheet. Any change to flow, pressure, speed, or handled medium invalidates the assumptions in this document.
+
+Plant personnel interact with the EF-170 mainly during routine rounds, preventive maintenance, and corrective interventions. This document standardizes those activities.
+
+The EF-170 is installed on a rigid fabricated skid with anchoring bolts and isolation where specified. Adjacent clearances must allow safe access for inspection and removal of the guard or cover.
+
+Design ambient conditions are -10 °C to +40 °C at a maximum altitude of 1000 m. Derating is required outside this envelope.
+
+Operators record running hours, abnormal noise, leakage, and vibration observations in the shift log. These records form the basis for the diagnostic steps in Section 2.
+
+The EF-170 forms part of the Air Quality group in the plant equipment register under asset tag EF-170-A. Its failure can interrupt the associated process train.
+
+Section 2: Technical Specifications
+
+| Parameter | Value |
+|---|---|
+| Asset tag                   | EF-170-A |
+| Equipment class             | Air Quality |
+| Nominal operating point     | 2900 rpm |
+| Rated power / duty          | 18.5 kW, continuous duty |
+| Supply                      | 400 V / 3-phase / 50 Hz (where applicable) |
+| Ambient range               | -10 °C to +40 °C |
+| Protection / mounting       | IP55 enclosure, rigid skid mounting |
+| Handled medium              | contaminated air |
+| Bearing service life (L10h) | 40 000 h under rated conditions |
+| Noise emission              | < 75 dB(A) at 1 m under rated load |
+
+Values in this table are the reference baseline for all diagnostic comparisons in this document.
+
+Section 3: Safety Prerequisites
+
+1. Release stored mechanical, hydraulic, pneumatic, and electrical energy and verify zero energy state with a test-before-touch check.
+2. Verify the absence of hazardous process media — pressure, temperature, chemicals — before opening any cover or flange.
+3. Barricade the work area and post a sign when guards or safety devices are removed.
+4. A second qualified person must be present for work involving rotating impeller or duct vacuum.
+5. Isolate all energy sources feeding the EF-170 and apply lockout/tagout per site procedure before accessing the equipment.
+6. Wear safety glasses, hearing protection, gloves, and safety shoes while working in the vicinity of the equipment.
+
+Section 4: Diagnostic Procedure
+
+1. Inspect seals and gaskets for weepage, and confirm that drain and vent lines are clear.
+2. Check mounting hardware, foundation bolts, and hold-down clamps for looseness or fretting marks.
+3. Verify that lubricant levels are within the sight glass marks and that lubricant color is normal.
+4. Inspect belts, couplings, and drive elements for glazing, cracking, misalignment, or abnormal wear patterns.
+5. Perform a controlled stop and confirm that coast-down time is consistent with historical values.
+6. Inspect the guards, covers, and openings for dust accumulation, foreign objects, or signs of rubbing contact.
+
+Section 5: Maintenance Procedure
+
+1. Record all findings, measurements, and replaced parts in the maintenance management system before closing the work order.
+2. Inspect the working element for cracks, deformation, imbalance, or foreign-object damage; replace damaged components.
+3. Renew lubricant according to the schedule in Section 5, and verify the lubricant type against the specification table.
+4. Replace worn seals, gaskets, and O-rings; pressure-test or leak-check the reassembled unit before return to service.
+5. Examine bearings, bushings, and mounts for wear, looseness, or excessive movement; measure and record clearances.
+6. Reinstall guards and safety devices, confirm the area is clear, and perform a controlled restart while monitoring current, vibration, and temperature.
+7. Re-torque foundation and coupling hardware to the values in the appendix after the first 50 hours of operation.
+
+Section 6: Common Failure Modes
+
+Imbalance develops from material buildup, erosion, or loss of rotating mass. Vibration spectra showing a dominant 1× running speed component point to imbalance or misalignment.
+
+Bearing-related failures account for the largest share of unplanned interventions on rotating equipment of this class. Contributing factors include contamination ingress, lubricant degradation, misalignment, and overload.
+
+Electrical failures are frequently preceded by elevated current, hot connection points, or insulation odor. Infrared scans during normal operation are an effective screening tool.
+
+Section 7: Troubleshooting Guide
+
+| Symptom | Probable Causes | Recommended Action |
+|---|---|---|
+| Premature bearing failure | Contamination, wrong lubricant, misalignment, overload | Identify root cause; correct lubrication and alignment |
+| Slow or failed start | Low supply voltage, seized working element, control fault | Measure starting voltage; rotate element by hand after isolation |
+| Overheating | Overloading, blocked ventilation, insufficient lubricant, high ambient | Reduce load; clean openings; check lubricant; verify ambient |
+| Abnormal noise during operation | Bearing damage, rubbing contact, lubricant starvation | Stop unit; inspect bearings and clearances; re-lubricate |
+| Unusual odor or smoke | Insulation overheating, lubricant breakdown, friction contact | Stop immediately; investigate before restart |
+| Frequent protective trips | Relay settings, genuine overload, instrumentation fault | Review trip records; test relay; verify instrument calibration |
+| Corrosion or coating damage | Aggressive environment, coating breakdown, water ingress | Assess extent; repair coating; improve enclosure sealing |
+| Drive element slipping or glazing | Incorrect tension, contamination, pulley wear | Adjust tension; clean or replace element; inspect pulleys |
+
+Section 8: Inspection and Records
+
+Inspection findings shall be recorded in the CMMS against asset tag EF-170-A. Minimum recorded data: date, inspector, operating hours, measured parameters, parts replaced, and next due date. Records are retained for the life of the asset plus five years.
+
+Section 9: Standard Work Checklist
+
+[ ] Work permit and isolation certificate issued and signed
+[ ] LOTO applied at all identified energy sources
+[ ] Zero energy state verified by test-before-touch
+[ ] PPE worn and in date; task-specific PPE confirmed
+[ ] Guards removed, tagged, and stored safely
+[ ] Components inspected per Section 4 steps
+[ ] Fasteners re-torqued to specified values
+[ ] Lubricant renewed and type verified
+[ ] Guards and safety devices reinstalled
+[ ] Interlocks and protective devices function-tested
+[ ] Area cleaned; tools and parts accounted for
+[ ] Restart performed under controlled conditions
+[ ] Parameters (current, vibration, temperature) recorded
+[ ] Work order closed with findings in CMMS
+
+Section 11: Lubrication Requirements
+
+Record every lubrication event with lubricant batch number in the CMMS to support warranty and failure analysis.
+
+Verify compatibility before mixing lubricants. When changing lubricant type, flush the cavity and renew seals.
+
+Over-greasing is a common cause of seal failure and overheating. Apply the quantity specified in the table and purge old grease through the relief port.
+
+Lubrication intervals assume clean operating conditions and rated load. Halve the interval in dusty, hot, or humid environments.
+
+Section 12: Operating Limits and Precautions
+
+Do not operate with guards removed, interlocks defeated, or known leaks unattended.
+
+Monitor the trend of the parameters in Section 2 rather than absolute alarms alone; slow drift gives early warning of developing faults.
+
+Frequent starts and stops stress the drive train. Allow the minimum cooldown or run-up interval specified before re-energizing.
+
+Operating the EF-170 above its rated point reduces component life exponentially; a 10 percent overload can halve bearing life.
+
+Section 13: General Workmanship Notes
+
+Measurement guidance: Record ambient conditions together with equipment readings so that comparisons across seasons remain meaningful.
+
+Quality guidance: Use only parts listed in the spare parts reference. Substitute parts require engineering approval before installation.
+
+Communication guidance: Hand over open findings to the next shift in writing, including the isolation status and any parts on order.
+
+General guidance: Always begin an intervention with a review of the equipment history. The last three work orders often reveal a pattern that isolates the current fault faster than any single measurement.
+
+Housekeeping guidance: Dust and debris are both a fire load and a heat-insulating layer. Keep the equipment surroundings clean as a standing condition, not a periodic task.
+
+Appendix A: Fastener Torque Reference
+
+| Fastener size | Property class | Torque (dry) | Torque (lightly oiled) |
+|---|---|---|---|
+| M8 | 8.8 | 24 N·m | 20 N·m |
+| M10 | 8.8 | 47 N·m | 39 N·m |
+| M12 | 8.8 | 82 N·m | 68 N·m |
+| M16 | 8.8 | 200 N·m | 165 N·m |
+| M20 | 8.8 | 390 N·m | 320 N·m |
+| M24 | 8.8 | 670 N·m | 560 N·m |
+
+Appendix B: Preventive Maintenance Schedule
+
+| Task | Frequency | Skill | Est. duration |
+|---|---|---|---|
+| Visual round and parameter check | Weekly | Operator | 15 min |
+| Cleaning of guards, openings, and surroundings | Monthly | Operator | 45 min |
+| Lubrication service | Quarterly | Technician | 60 min |
+| Detailed inspection and fastener check | Semi-annual | Technician | 3 h |
+| Alignment and drive element check | Annual | Technician | 4 h |
+| Full overhaul assessment | 3-yearly | Senior technician | 1 day |
+
+Appendix C: Synthetic Case Studies
+
+Case study (synthetic): Recurring seal leaks were found to follow a lubricant change. The replacement lubricant was incompatible with the elastomer, causing swelling. Restoring the specified lubricant and renewing seals eliminated the leaks.
+
+Case study (synthetic): Elevated current on one phase was traced to a terminal connection resistance of 4 mΩ versus the expected 0.5 mΩ. Thermal imaging during normal operation located the hot joint; re-termination resolved the imbalance.
+
+Case study (synthetic): A unit tripped repeatedly on overload. The driven element was binding after a repair left a spacer mispositioned. Correct reassembly and a controlled restart confirmed normal current draw.
+
+Appendix D: Knowledge Check (Synthetic)
+
+Q2. What does a dominant 1X vibration component typically indicate? — A: Imbalance or misalignment of the rotating element.
+Q1. What must be verified before reaching through any opening? — A: The working element and shaft are completely stationary and energy isolation is verified.
+Q5. What records are mandatory after maintenance? — A: Date, inspector, hours, measured parameters, parts replaced, next due date in the CMMS.
+Q3. Why is trend monitoring preferred over absolute alarm limits? — A: Slow drift reveals developing faults before alarm thresholds are crossed.
+
+Appendix E: Document Control
+
+Revision history: v1.0 — initial issue of this synthetic training document for the EF-170 equipment class.
+This document is part of a synthetic corpus generated for training and evaluation purposes. It contains no real personal data and no proprietary site information.
+All equipment designations, asset tags, and parameter values are fictional. Any resemblance to actual installations is coincidental.
+
+Section 10: Definitions and Abbreviations
+
+- **1X**: Vibration component at running rotational frequency.
+- **IR**: Infrared thermography for non-contact temperature screening.
+- **NPSH**: Net Positive Suction Head, a pump suction condition parameter.
+- **CMMS**: Computerized Maintenance Management System for work orders and history.
+- **PPE**: Personal Protective Equipment required for the task.
+- **PM**: Preventive Maintenance task performed on schedule.

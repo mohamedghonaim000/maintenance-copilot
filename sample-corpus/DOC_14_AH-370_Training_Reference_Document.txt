@@ -1,0 +1,193 @@
+DOC-14
+DOC_14_AH-370_Training_Reference_Document.md | 5 pages
+========================================================================
+
+DOCUMENT TITLE: Air Handling Unit — Training Reference Document
+EQUIPMENT: AH-370 Air Handling Unit
+DOCUMENT VERSION: v2.1
+DOCUMENT TYPE: Synthetic Training Document
+
+Section 1: Equipment Overview
+
+The AH-370 forms part of the HVAC group in the plant equipment register under asset tag AH-370-A. Its failure can interrupt the associated process train.
+
+The AH-370 is installed on a rigid fabricated skid with anchoring bolts and isolation where specified. Adjacent clearances must allow safe access for inspection and removal of the guard or cover.
+
+The equipment was selected for the duty point described in the process datasheet. Any change to flow, pressure, speed, or handled medium invalidates the assumptions in this document.
+
+Plant personnel interact with the AH-370 mainly during routine rounds, preventive maintenance, and corrective interventions. This document standardizes those activities.
+
+The drive train consists of a prime mover, a coupling or transmission element, and the working element of the machine. Each element contributes stored energy that must be controlled before work begins.
+
+An equipment file is kept at the control room containing the as-built drawings, previous maintenance records, and the modification log for the AH-370.
+
+Section 2: Technical Specifications
+
+| Parameter | Value |
+|---|---|
+| Asset tag                   | AH-370-A |
+| Equipment class             | HVAC |
+| Nominal operating point     | fan 900 rpm |
+| Rated power / duty          | 30 kW, continuous duty |
+| Supply                      | 400 V / 3-phase / 50 Hz (where applicable) |
+| Ambient range               | -10 °C to +40 °C |
+| Protection / mounting       | IP55 enclosure, rigid skid mounting |
+| Handled medium              | conditioned air |
+| Bearing service life (L10h) | 40 000 h under rated conditions |
+| Noise emission              | < 75 dB(A) at 1 m under rated load |
+
+Values in this table are the reference baseline for all diagnostic comparisons in this document.
+
+Section 3: Safety Prerequisites
+
+1. Use calibrated lifting equipment for components above 25 kg and follow rigging plan for heavy lifts.
+2. Never bypass, jumper, or defeat an interlock, guard switch, or protective device.
+3. Release stored mechanical, hydraulic, pneumatic, and electrical energy and verify zero energy state with a test-before-touch check.
+4. Verify the absence of hazardous process media — pressure, temperature, chemicals — before opening any cover or flange.
+5. A second qualified person must be present for work involving rotating fan wheels or duct static pressure.
+6. Barricade the work area and post a sign when guards or safety devices are removed.
+
+Section 4: Diagnostic Procedure
+
+1. Measure motor current on all phases and compare with the rated value; a persistent imbalance above 5 percent requires investigation.
+2. Inspect seals and gaskets for weepage, and confirm that drain and vent lines are clear.
+3. Check instrumentation readings against calibrated test instruments where the installed gauge is suspected.
+4. Review the shift log and trend data for drifting parameters that preceded the current condition.
+5. Observe the equipment during a full operating cycle and compare speed, flow, pressure, and current against the expected values in Section 2.
+6. Check mounting hardware, foundation bolts, and hold-down clamps for looseness or fretting marks.
+
+Section 5: Maintenance Procedure
+
+1. Examine bearings, bushings, and mounts for wear, looseness, or excessive movement; measure and record clearances.
+2. Isolate electrical power, lock out the disconnect, and tag the isolation point before any physical work.
+3. Replace worn seals, gaskets, and O-rings; pressure-test or leak-check the reassembled unit before return to service.
+4. Inspect the working element for cracks, deformation, imbalance, or foreign-object damage; replace damaged components.
+5. Record all findings, measurements, and replaced parts in the maintenance management system before closing the work order.
+6. Function-test interlocks, sensors, and protective devices after any intervention that disturbs them.
+7. Renew lubricant according to the schedule in Section 5, and verify the lubricant type against the specification table.
+
+Section 6: Common Failure Modes
+
+Imbalance develops from material buildup, erosion, or loss of rotating mass. Vibration spectra showing a dominant 1× running speed component point to imbalance or misalignment.
+
+Seal and gasket leaks rarely develop suddenly. Trend weepage during rounds; a stain that doubles between checks indicates an active leak path that will progress.
+
+Looseness produces broadband vibration with harmonics and is often mistaken for bearing damage. Verify foundation and hold-down condition before condemning bearings.
+
+Section 7: Troubleshooting Guide
+
+| Symptom | Probable Causes | Recommended Action |
+|---|---|---|
+| Pressure / flow instability | Cavitation risk, control instability, partial blockage | Verify suction conditions; tune controls; inspect passages |
+| Erratic instrument readings | Sensor drift, wiring fault, moisture ingress | Calibrate sensor; inspect wiring and junctions |
+| Excessive vibration | Loose mounting hardware, imbalance, misalignment, bearing wear | Re-torque mounts; check balance and alignment; inspect bearings |
+| Corrosion or coating damage | Aggressive environment, coating breakdown, water ingress | Assess extent; repair coating; improve enclosure sealing |
+| Slow or failed start | Low supply voltage, seized working element, control fault | Measure starting voltage; rotate element by hand after isolation |
+| Leakage at seals or joints | Worn seals, loose fasteners, gasket damage, thermal cycling | Replace seals; re-torque to spec; renew gaskets |
+| Frequent protective trips | Relay settings, genuine overload, instrumentation fault | Review trip records; test relay; verify instrument calibration |
+| Drive element slipping or glazing | Incorrect tension, contamination, pulley wear | Adjust tension; clean or replace element; inspect pulleys |
+
+Section 8: Inspection and Records
+
+Inspection findings shall be recorded in the CMMS against asset tag AH-370-A. Minimum recorded data: date, inspector, operating hours, measured parameters, parts replaced, and next due date. Records are retained for the life of the asset plus five years.
+
+Section 9: Standard Work Checklist
+
+[ ] Work permit and isolation certificate issued and signed
+[ ] LOTO applied at all identified energy sources
+[ ] Zero energy state verified by test-before-touch
+[ ] PPE worn and in date; task-specific PPE confirmed
+[ ] Guards removed, tagged, and stored safely
+[ ] Components inspected per Section 4 steps
+[ ] Fasteners re-torqued to specified values
+[ ] Lubricant renewed and type verified
+[ ] Guards and safety devices reinstalled
+[ ] Interlocks and protective devices function-tested
+[ ] Area cleaned; tools and parts accounted for
+[ ] Restart performed under controlled conditions
+[ ] Parameters (current, vibration, temperature) recorded
+[ ] Work order closed with findings in CMMS
+
+Section 11: Lubrication Requirements
+
+Lubrication intervals assume clean operating conditions and rated load. Halve the interval in dusty, hot, or humid environments.
+
+Verify compatibility before mixing lubricants. When changing lubricant type, flush the cavity and renew seals.
+
+Record every lubrication event with lubricant batch number in the CMMS to support warranty and failure analysis.
+
+Over-greasing is a common cause of seal failure and overheating. Apply the quantity specified in the table and purge old grease through the relief port.
+
+Section 12: Operating Limits and Precautions
+
+Monitor the trend of the parameters in Section 2 rather than absolute alarms alone; slow drift gives early warning of developing faults.
+
+Operating the AH-370 above its rated point reduces component life exponentially; a 10 percent overload can halve bearing life.
+
+Do not operate with guards removed, interlocks defeated, or known leaks unattended.
+
+Frequent starts and stops stress the drive train. Allow the minimum cooldown or run-up interval specified before re-energizing.
+
+Section 13: General Workmanship Notes
+
+Measurement guidance: Record ambient conditions together with equipment readings so that comparisons across seasons remain meaningful.
+
+General guidance: Always begin an intervention with a review of the equipment history. The last three work orders often reveal a pattern that isolates the current fault faster than any single measurement.
+
+Communication guidance: Hand over open findings to the next shift in writing, including the isolation status and any parts on order.
+
+Quality guidance: Use only parts listed in the spare parts reference. Substitute parts require engineering approval before installation.
+
+Housekeeping guidance: Dust and debris are both a fire load and a heat-insulating layer. Keep the equipment surroundings clean as a standing condition, not a periodic task.
+
+Appendix A: Fastener Torque Reference
+
+| Fastener size | Property class | Torque (dry) | Torque (lightly oiled) |
+|---|---|---|---|
+| M8 | 8.8 | 24 N·m | 20 N·m |
+| M10 | 8.8 | 47 N·m | 39 N·m |
+| M12 | 8.8 | 82 N·m | 68 N·m |
+| M16 | 8.8 | 200 N·m | 165 N·m |
+| M20 | 8.8 | 390 N·m | 320 N·m |
+| M24 | 8.8 | 670 N·m | 560 N·m |
+
+Appendix B: Preventive Maintenance Schedule
+
+| Task | Frequency | Skill | Est. duration |
+|---|---|---|---|
+| Visual round and parameter check | Weekly | Operator | 15 min |
+| Cleaning of guards, openings, and surroundings | Monthly | Operator | 45 min |
+| Lubrication service | Quarterly | Technician | 60 min |
+| Detailed inspection and fastener check | Semi-annual | Technician | 3 h |
+| Alignment and drive element check | Annual | Technician | 4 h |
+| Full overhaul assessment | 3-yearly | Senior technician | 1 day |
+
+Appendix C: Synthetic Case Studies
+
+Case study (synthetic): A unit tripped repeatedly on overload. The driven element was binding after a repair left a spacer mispositioned. Correct reassembly and a controlled restart confirmed normal current draw.
+
+Case study (synthetic): Elevated current on one phase was traced to a terminal connection resistance of 4 mΩ versus the expected 0.5 mΩ. Thermal imaging during normal operation located the hot joint; re-termination resolved the imbalance.
+
+Case study (synthetic): Recurring seal leaks were found to follow a lubricant change. The replacement lubricant was incompatible with the elastomer, causing swelling. Restoring the specified lubricant and renewing seals eliminated the leaks.
+
+Appendix D: Knowledge Check (Synthetic)
+
+Q4. State the test-before-touch rule. — A: After isolation, attempt start and test for absence of energy before touching the equipment.
+Q2. What does a dominant 1X vibration component typically indicate? — A: Imbalance or misalignment of the rotating element.
+Q3. Why is trend monitoring preferred over absolute alarm limits? — A: Slow drift reveals developing faults before alarm thresholds are crossed.
+Q5. What records are mandatory after maintenance? — A: Date, inspector, hours, measured parameters, parts replaced, next due date in the CMMS.
+
+Appendix E: Document Control
+
+Revision history: v1.0 — initial issue of this synthetic training document for the AH-370 equipment class.
+This document is part of a synthetic corpus generated for training and evaluation purposes. It contains no real personal data and no proprietary site information.
+All equipment designations, asset tags, and parameter values are fictional. Any resemblance to actual installations is coincidental.
+
+Section 10: Definitions and Abbreviations
+
+- **PM**: Preventive Maintenance task performed on schedule.
+- **NPSH**: Net Positive Suction Head, a pump suction condition parameter.
+- **LOTO**: Lockout/Tagout — the control of hazardous energy procedure.
+- **CMMS**: Computerized Maintenance Management System for work orders and history.
+- **MTBF**: Mean Time Between Failures, a reliability statistic.
+- **PPE**: Personal Protective Equipment required for the task.
