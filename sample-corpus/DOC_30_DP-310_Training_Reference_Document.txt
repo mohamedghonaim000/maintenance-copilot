@@ -1,0 +1,193 @@
+DOC-30
+DOC_30_DP-310_Training_Reference_Document.md | 5 pages
+========================================================================
+
+DOCUMENT TITLE: Metering Dosing Pump — Training Reference Document
+EQUIPMENT: DP-310 Metering Dosing Pump
+DOCUMENT VERSION: v2.1
+DOCUMENT TYPE: Synthetic Training Document
+
+Section 1: Equipment Overview
+
+An equipment file is kept at the control room containing the as-built drawings, previous maintenance records, and the modification log for the DP-310.
+
+The DP-310 is installed on a rigid fabricated skid with anchoring bolts and isolation where specified. Adjacent clearances must allow safe access for inspection and removal of the guard or cover.
+
+Plant personnel interact with the DP-310 mainly during routine rounds, preventive maintenance, and corrective interventions. This document standardizes those activities.
+
+The DP-310 Metering Dosing Pump injects treatment chemical into the cooling water circuit at a precisely controlled stroke rate. It is designed for continuous duty in a ventilated industrial environment and is rated for 0.75 kW at its nominal operating point.
+
+The drive train consists of a prime mover, a coupling or transmission element, and the working element of the machine. Each element contributes stored energy that must be controlled before work begins.
+
+Operators record running hours, abnormal noise, leakage, and vibration observations in the shift log. These records form the basis for the diagnostic steps in Section 2.
+
+Section 2: Technical Specifications
+
+| Parameter | Value |
+|---|---|
+| Asset tag                   | DP-310-A |
+| Equipment class             | Fluid Transfer |
+| Nominal operating point     | 180 strokes/min |
+| Rated power / duty          | 0.75 kW, continuous duty |
+| Supply                      | 400 V / 3-phase / 50 Hz (where applicable) |
+| Ambient range               | -10 °C to +40 °C |
+| Protection / mounting       | IP55 enclosure, rigid skid mounting |
+| Handled medium              | treatment chemical |
+| Bearing service life (L10h) | 40 000 h under rated conditions |
+| Noise emission              | < 75 dB(A) at 1 m under rated load |
+
+Values in this table are the reference baseline for all diagnostic comparisons in this document.
+
+Section 3: Safety Prerequisites
+
+1. Use calibrated lifting equipment for components above 25 kg and follow rigging plan for heavy lifts.
+2. Barricade the work area and post a sign when guards or safety devices are removed.
+3. A second qualified person must be present for work involving chemical under pressure or diaphragm rupture.
+4. Release stored mechanical, hydraulic, pneumatic, and electrical energy and verify zero energy state with a test-before-touch check.
+5. Confirm the working element and shaft are completely stationary before reaching through any opening or removing any guard.
+6. Isolate all energy sources feeding the DP-310 and apply lockout/tagout per site procedure before accessing the equipment.
+
+Section 4: Diagnostic Procedure
+
+1. Feel-check accessible bearing housings for abnormal temperature after a minimum of 30 minutes of operation.
+2. Measure motor current on all phases and compare with the rated value; a persistent imbalance above 5 percent requires investigation.
+3. Check mounting hardware, foundation bolts, and hold-down clamps for looseness or fretting marks.
+4. Verify that lubricant levels are within the sight glass marks and that lubricant color is normal.
+5. Check instrumentation readings against calibrated test instruments where the installed gauge is suspected.
+6. Listen for bearing noise, imbalance, rubbing, or irregular knocking while the machine is running under load.
+
+Section 5: Maintenance Procedure
+
+1. Clean the work area, remove tools and consumables, and dispose of waste lubricant and parts per site procedure.
+2. Remove accumulated dust and debris from guards, housings, screens, and ventilation openings using low-pressure air or vacuum.
+3. Re-torque foundation and coupling hardware to the values in the appendix after the first 50 hours of operation.
+4. Examine bearings, bushings, and mounts for wear, looseness, or excessive movement; measure and record clearances.
+5. Renew lubricant according to the schedule in Section 5, and verify the lubricant type against the specification table.
+6. Replace worn seals, gaskets, and O-rings; pressure-test or leak-check the reassembled unit before return to service.
+7. Reinstall guards and safety devices, confirm the area is clear, and perform a controlled restart while monitoring current, vibration, and temperature.
+
+Section 6: Common Failure Modes
+
+Looseness produces broadband vibration with harmonics and is often mistaken for bearing damage. Verify foundation and hold-down condition before condemning bearings.
+
+Bearing-related failures account for the largest share of unplanned interventions on rotating equipment of this class. Contributing factors include contamination ingress, lubricant degradation, misalignment, and overload.
+
+Electrical failures are frequently preceded by elevated current, hot connection points, or insulation odor. Infrared scans during normal operation are an effective screening tool.
+
+Section 7: Troubleshooting Guide
+
+| Symptom | Probable Causes | Recommended Action |
+|---|---|---|
+| Pressure / flow instability | Cavitation risk, control instability, partial blockage | Verify suction conditions; tune controls; inspect passages |
+| Erratic instrument readings | Sensor drift, wiring fault, moisture ingress | Calibrate sensor; inspect wiring and junctions |
+| Current above rating | Mechanical overload, voltage imbalance, phase loss, driven element binding | Measure phases; inspect driven element; check supply quality |
+| Frequent protective trips | Relay settings, genuine overload, instrumentation fault | Review trip records; test relay; verify instrument calibration |
+| Corrosion or coating damage | Aggressive environment, coating breakdown, water ingress | Assess extent; repair coating; improve enclosure sealing |
+| Reduced output / performance | Worn working element, internal leakage, blocked passage, speed drift | Inspect element; check internal clearances; clean passages |
+| Slow or failed start | Low supply voltage, seized working element, control fault | Measure starting voltage; rotate element by hand after isolation |
+| Abnormal noise during operation | Bearing damage, rubbing contact, lubricant starvation | Stop unit; inspect bearings and clearances; re-lubricate |
+
+Section 8: Inspection and Records
+
+Inspection findings shall be recorded in the CMMS against asset tag DP-310-A. Minimum recorded data: date, inspector, operating hours, measured parameters, parts replaced, and next due date. Records are retained for the life of the asset plus five years.
+
+Section 9: Standard Work Checklist
+
+[ ] Work permit and isolation certificate issued and signed
+[ ] LOTO applied at all identified energy sources
+[ ] Zero energy state verified by test-before-touch
+[ ] PPE worn and in date; task-specific PPE confirmed
+[ ] Guards removed, tagged, and stored safely
+[ ] Components inspected per Section 4 steps
+[ ] Fasteners re-torqued to specified values
+[ ] Lubricant renewed and type verified
+[ ] Guards and safety devices reinstalled
+[ ] Interlocks and protective devices function-tested
+[ ] Area cleaned; tools and parts accounted for
+[ ] Restart performed under controlled conditions
+[ ] Parameters (current, vibration, temperature) recorded
+[ ] Work order closed with findings in CMMS
+
+Section 11: Lubrication Requirements
+
+Lubrication intervals assume clean operating conditions and rated load. Halve the interval in dusty, hot, or humid environments.
+
+Verify compatibility before mixing lubricants. When changing lubricant type, flush the cavity and renew seals.
+
+Over-greasing is a common cause of seal failure and overheating. Apply the quantity specified in the table and purge old grease through the relief port.
+
+Record every lubrication event with lubricant batch number in the CMMS to support warranty and failure analysis.
+
+Section 12: Operating Limits and Precautions
+
+Frequent starts and stops stress the drive train. Allow the minimum cooldown or run-up interval specified before re-energizing.
+
+Operating the DP-310 above its rated point reduces component life exponentially; a 10 percent overload can halve bearing life.
+
+Monitor the trend of the parameters in Section 2 rather than absolute alarms alone; slow drift gives early warning of developing faults.
+
+Do not operate with guards removed, interlocks defeated, or known leaks unattended.
+
+Section 13: General Workmanship Notes
+
+Communication guidance: Hand over open findings to the next shift in writing, including the isolation status and any parts on order.
+
+Measurement guidance: Record ambient conditions together with equipment readings so that comparisons across seasons remain meaningful.
+
+Housekeeping guidance: Dust and debris are both a fire load and a heat-insulating layer. Keep the equipment surroundings clean as a standing condition, not a periodic task.
+
+Quality guidance: Use only parts listed in the spare parts reference. Substitute parts require engineering approval before installation.
+
+General guidance: Always begin an intervention with a review of the equipment history. The last three work orders often reveal a pattern that isolates the current fault faster than any single measurement.
+
+Appendix A: Fastener Torque Reference
+
+| Fastener size | Property class | Torque (dry) | Torque (lightly oiled) |
+|---|---|---|---|
+| M8 | 8.8 | 24 N·m | 20 N·m |
+| M10 | 8.8 | 47 N·m | 39 N·m |
+| M12 | 8.8 | 82 N·m | 68 N·m |
+| M16 | 8.8 | 200 N·m | 165 N·m |
+| M20 | 8.8 | 390 N·m | 320 N·m |
+| M24 | 8.8 | 670 N·m | 560 N·m |
+
+Appendix B: Preventive Maintenance Schedule
+
+| Task | Frequency | Skill | Est. duration |
+|---|---|---|---|
+| Visual round and parameter check | Weekly | Operator | 15 min |
+| Cleaning of guards, openings, and surroundings | Monthly | Operator | 45 min |
+| Lubrication service | Quarterly | Technician | 60 min |
+| Detailed inspection and fastener check | Semi-annual | Technician | 3 h |
+| Alignment and drive element check | Annual | Technician | 4 h |
+| Full overhaul assessment | 3-yearly | Senior technician | 1 day |
+
+Appendix C: Synthetic Case Studies
+
+Case study (synthetic): Recurring seal leaks were found to follow a lubricant change. The replacement lubricant was incompatible with the elastomer, causing swelling. Restoring the specified lubricant and renewing seals eliminated the leaks.
+
+Case study (synthetic): A unit tripped repeatedly on overload. The driven element was binding after a repair left a spacer mispositioned. Correct reassembly and a controlled restart confirmed normal current draw.
+
+Case study (synthetic): A similar unit in the corpus fleet showed rising 1X vibration over six weeks. Investigation found foundation bolt looseness from thermal cycling after a process upset. Re-torquing to specification restored baseline vibration without part replacement.
+
+Appendix D: Knowledge Check (Synthetic)
+
+Q2. What does a dominant 1X vibration component typically indicate? — A: Imbalance or misalignment of the rotating element.
+Q4. State the test-before-touch rule. — A: After isolation, attempt start and test for absence of energy before touching the equipment.
+Q3. Why is trend monitoring preferred over absolute alarm limits? — A: Slow drift reveals developing faults before alarm thresholds are crossed.
+Q5. What records are mandatory after maintenance? — A: Date, inspector, hours, measured parameters, parts replaced, next due date in the CMMS.
+
+Appendix E: Document Control
+
+Revision history: v1.0 — initial issue of this synthetic training document for the DP-310 equipment class.
+This document is part of a synthetic corpus generated for training and evaluation purposes. It contains no real personal data and no proprietary site information.
+All equipment designations, asset tags, and parameter values are fictional. Any resemblance to actual installations is coincidental.
+
+Section 10: Definitions and Abbreviations
+
+- **1X**: Vibration component at running rotational frequency.
+- **PPE**: Personal Protective Equipment required for the task.
+- **PM**: Preventive Maintenance task performed on schedule.
+- **CMMS**: Computerized Maintenance Management System for work orders and history.
+- **MTBF**: Mean Time Between Failures, a reliability statistic.
+- **LOTO**: Lockout/Tagout — the control of hazardous energy procedure.

@@ -1,0 +1,193 @@
+DOC-20
+DOC_20_HO-330_Troubleshooting_Guide.md | 5 pages
+========================================================================
+
+DOCUMENT TITLE: Electric Chain Hoist — Troubleshooting Guide
+EQUIPMENT: HO-330 Electric Chain Hoist
+DOCUMENT VERSION: v1.2
+DOCUMENT TYPE: Synthetic Training Document
+
+Section 1: Equipment Overview
+
+The unit operates at lifting 4 m/min under normal load conditions. Operating outside the envelope defined in Section 2 accelerates wear on bearings, seals, and drive components.
+
+The HO-330 is installed on a rigid fabricated skid with anchoring bolts and isolation where specified. Adjacent clearances must allow safe access for inspection and removal of the guard or cover.
+
+Design ambient conditions are -10 °C to +40 °C at a maximum altitude of 1000 m. Derating is required outside this envelope.
+
+The HO-330 Electric Chain Hoist lifts and positions maintenance loads up to 3 tonnes on the workshop gantry beam. It is designed for continuous duty in a ventilated industrial environment and is rated for 4.5 kW at its nominal operating point.
+
+Operators record running hours, abnormal noise, leakage, and vibration observations in the shift log. These records form the basis for the diagnostic steps in Section 2.
+
+An equipment file is kept at the control room containing the as-built drawings, previous maintenance records, and the modification log for the HO-330.
+
+Section 2: Technical Specifications
+
+| Parameter | Value |
+|---|---|
+| Asset tag                   | HO-330-A |
+| Equipment class             | Lifting |
+| Nominal operating point     | lifting 4 m/min |
+| Rated power / duty          | 4.5 kW, continuous duty |
+| Supply                      | 400 V / 3-phase / 50 Hz (where applicable) |
+| Ambient range               | -10 °C to +40 °C |
+| Protection / mounting       | IP55 enclosure, rigid skid mounting |
+| Handled medium              | suspended loads |
+| Bearing service life (L10h) | 40 000 h under rated conditions |
+| Noise emission              | < 75 dB(A) at 1 m under rated load |
+
+Values in this table are the reference baseline for all diagnostic comparisons in this document.
+
+Section 3: Safety Prerequisites
+
+1. Verify the absence of hazardous process media — pressure, temperature, chemicals — before opening any cover or flange.
+2. Isolate all energy sources feeding the HO-330 and apply lockout/tagout per site procedure before accessing the equipment.
+3. Barricade the work area and post a sign when guards or safety devices are removed.
+4. Never bypass, jumper, or defeat an interlock, guard switch, or protective device.
+5. A second qualified person must be present for work involving suspended loads or lifting chains.
+6. Release stored mechanical, hydraulic, pneumatic, and electrical energy and verify zero energy state with a test-before-touch check.
+
+Section 4: Diagnostic Procedure
+
+1. Review the shift log and trend data for drifting parameters that preceded the current condition.
+2. Listen for bearing noise, imbalance, rubbing, or irregular knocking while the machine is running under load.
+3. Perform a controlled stop and confirm that coast-down time is consistent with historical values.
+4. Check instrumentation readings against calibrated test instruments where the installed gauge is suspected.
+5. Inspect seals and gaskets for weepage, and confirm that drain and vent lines are clear.
+6. Feel-check accessible bearing housings for abnormal temperature after a minimum of 30 minutes of operation.
+
+Section 5: Maintenance Procedure
+
+1. Clean the work area, remove tools and consumables, and dispose of waste lubricant and parts per site procedure.
+2. Isolate electrical power, lock out the disconnect, and tag the isolation point before any physical work.
+3. Replace worn seals, gaskets, and O-rings; pressure-test or leak-check the reassembled unit before return to service.
+4. Reinstall guards and safety devices, confirm the area is clear, and perform a controlled restart while monitoring current, vibration, and temperature.
+5. Examine bearings, bushings, and mounts for wear, looseness, or excessive movement; measure and record clearances.
+6. Renew lubricant according to the schedule in Section 5, and verify the lubricant type against the specification table.
+7. Record all findings, measurements, and replaced parts in the maintenance management system before closing the work order.
+
+Section 6: Common Failure Modes
+
+Seal and gasket leaks rarely develop suddenly. Trend weepage during rounds; a stain that doubles between checks indicates an active leak path that will progress.
+
+Looseness produces broadband vibration with harmonics and is often mistaken for bearing damage. Verify foundation and hold-down condition before condemning bearings.
+
+Imbalance develops from material buildup, erosion, or loss of rotating mass. Vibration spectra showing a dominant 1× running speed component point to imbalance or misalignment.
+
+Section 7: Troubleshooting Guide
+
+| Symptom | Probable Causes | Recommended Action |
+|---|---|---|
+| Overheating | Overloading, blocked ventilation, insufficient lubricant, high ambient | Reduce load; clean openings; check lubricant; verify ambient |
+| Slow or failed start | Low supply voltage, seized working element, control fault | Measure starting voltage; rotate element by hand after isolation |
+| Erratic instrument readings | Sensor drift, wiring fault, moisture ingress | Calibrate sensor; inspect wiring and junctions |
+| Abnormal noise during operation | Bearing damage, rubbing contact, lubricant starvation | Stop unit; inspect bearings and clearances; re-lubricate |
+| Corrosion or coating damage | Aggressive environment, coating breakdown, water ingress | Assess extent; repair coating; improve enclosure sealing |
+| Frequent protective trips | Relay settings, genuine overload, instrumentation fault | Review trip records; test relay; verify instrument calibration |
+| Current above rating | Mechanical overload, voltage imbalance, phase loss, driven element binding | Measure phases; inspect driven element; check supply quality |
+| Drive element slipping or glazing | Incorrect tension, contamination, pulley wear | Adjust tension; clean or replace element; inspect pulleys |
+
+Section 8: Inspection and Records
+
+Inspection findings shall be recorded in the CMMS against asset tag HO-330-A. Minimum recorded data: date, inspector, operating hours, measured parameters, parts replaced, and next due date. Records are retained for the life of the asset plus five years.
+
+Section 9: Standard Work Checklist
+
+[ ] Work permit and isolation certificate issued and signed
+[ ] LOTO applied at all identified energy sources
+[ ] Zero energy state verified by test-before-touch
+[ ] PPE worn and in date; task-specific PPE confirmed
+[ ] Guards removed, tagged, and stored safely
+[ ] Components inspected per Section 4 steps
+[ ] Fasteners re-torqued to specified values
+[ ] Lubricant renewed and type verified
+[ ] Guards and safety devices reinstalled
+[ ] Interlocks and protective devices function-tested
+[ ] Area cleaned; tools and parts accounted for
+[ ] Restart performed under controlled conditions
+[ ] Parameters (current, vibration, temperature) recorded
+[ ] Work order closed with findings in CMMS
+
+Section 11: Lubrication Requirements
+
+Verify compatibility before mixing lubricants. When changing lubricant type, flush the cavity and renew seals.
+
+Over-greasing is a common cause of seal failure and overheating. Apply the quantity specified in the table and purge old grease through the relief port.
+
+Lubrication intervals assume clean operating conditions and rated load. Halve the interval in dusty, hot, or humid environments.
+
+Record every lubrication event with lubricant batch number in the CMMS to support warranty and failure analysis.
+
+Section 12: Operating Limits and Precautions
+
+Monitor the trend of the parameters in Section 2 rather than absolute alarms alone; slow drift gives early warning of developing faults.
+
+Operating the HO-330 above its rated point reduces component life exponentially; a 10 percent overload can halve bearing life.
+
+Frequent starts and stops stress the drive train. Allow the minimum cooldown or run-up interval specified before re-energizing.
+
+Do not operate with guards removed, interlocks defeated, or known leaks unattended.
+
+Section 13: General Workmanship Notes
+
+Housekeeping guidance: Dust and debris are both a fire load and a heat-insulating layer. Keep the equipment surroundings clean as a standing condition, not a periodic task.
+
+Quality guidance: Use only parts listed in the spare parts reference. Substitute parts require engineering approval before installation.
+
+General guidance: Always begin an intervention with a review of the equipment history. The last three work orders often reveal a pattern that isolates the current fault faster than any single measurement.
+
+Measurement guidance: Record ambient conditions together with equipment readings so that comparisons across seasons remain meaningful.
+
+Communication guidance: Hand over open findings to the next shift in writing, including the isolation status and any parts on order.
+
+Appendix A: Fastener Torque Reference
+
+| Fastener size | Property class | Torque (dry) | Torque (lightly oiled) |
+|---|---|---|---|
+| M8 | 8.8 | 24 N·m | 20 N·m |
+| M10 | 8.8 | 47 N·m | 39 N·m |
+| M12 | 8.8 | 82 N·m | 68 N·m |
+| M16 | 8.8 | 200 N·m | 165 N·m |
+| M20 | 8.8 | 390 N·m | 320 N·m |
+| M24 | 8.8 | 670 N·m | 560 N·m |
+
+Appendix B: Preventive Maintenance Schedule
+
+| Task | Frequency | Skill | Est. duration |
+|---|---|---|---|
+| Visual round and parameter check | Weekly | Operator | 15 min |
+| Cleaning of guards, openings, and surroundings | Monthly | Operator | 45 min |
+| Lubrication service | Quarterly | Technician | 60 min |
+| Detailed inspection and fastener check | Semi-annual | Technician | 3 h |
+| Alignment and drive element check | Annual | Technician | 4 h |
+| Full overhaul assessment | 3-yearly | Senior technician | 1 day |
+
+Appendix C: Synthetic Case Studies
+
+Case study (synthetic): Recurring seal leaks were found to follow a lubricant change. The replacement lubricant was incompatible with the elastomer, causing swelling. Restoring the specified lubricant and renewing seals eliminated the leaks.
+
+Case study (synthetic): A similar unit in the corpus fleet showed rising 1X vibration over six weeks. Investigation found foundation bolt looseness from thermal cycling after a process upset. Re-torquing to specification restored baseline vibration without part replacement.
+
+Case study (synthetic): A unit tripped repeatedly on overload. The driven element was binding after a repair left a spacer mispositioned. Correct reassembly and a controlled restart confirmed normal current draw.
+
+Appendix D: Knowledge Check (Synthetic)
+
+Q4. State the test-before-touch rule. — A: After isolation, attempt start and test for absence of energy before touching the equipment.
+Q2. What does a dominant 1X vibration component typically indicate? — A: Imbalance or misalignment of the rotating element.
+Q5. What records are mandatory after maintenance? — A: Date, inspector, hours, measured parameters, parts replaced, next due date in the CMMS.
+Q1. What must be verified before reaching through any opening? — A: The working element and shaft are completely stationary and energy isolation is verified.
+
+Appendix E: Document Control
+
+Revision history: v1.0 — initial issue of this synthetic training document for the HO-330 equipment class.
+This document is part of a synthetic corpus generated for training and evaluation purposes. It contains no real personal data and no proprietary site information.
+All equipment designations, asset tags, and parameter values are fictional. Any resemblance to actual installations is coincidental.
+
+Section 10: Definitions and Abbreviations
+
+- **1X**: Vibration component at running rotational frequency.
+- **PPE**: Personal Protective Equipment required for the task.
+- **PM**: Preventive Maintenance task performed on schedule.
+- **LOTO**: Lockout/Tagout — the control of hazardous energy procedure.
+- **MTBF**: Mean Time Between Failures, a reliability statistic.
+- **CMMS**: Computerized Maintenance Management System for work orders and history.

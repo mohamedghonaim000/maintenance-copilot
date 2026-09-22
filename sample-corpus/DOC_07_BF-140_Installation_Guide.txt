@@ -1,0 +1,193 @@
+DOC-07
+DOC_07_BF-140_Installation_Guide.md | 5 pages
+========================================================================
+
+DOCUMENT TITLE: Boiler Feedwater Pump — Installation Guide
+EQUIPMENT: BF-140 Boiler Feedwater Pump
+DOCUMENT VERSION: v1.3
+DOCUMENT TYPE: Synthetic Training Document
+
+Section 1: Equipment Overview
+
+Plant personnel interact with the BF-140 mainly during routine rounds, preventive maintenance, and corrective interventions. This document standardizes those activities.
+
+An equipment file is kept at the control room containing the as-built drawings, previous maintenance records, and the modification log for the BF-140.
+
+The drive train consists of a prime mover, a coupling or transmission element, and the working element of the machine. Each element contributes stored energy that must be controlled before work begins.
+
+The unit operates at 3500 rpm under normal load conditions. Operating outside the envelope defined in Section 2 accelerates wear on bearings, seals, and drive components.
+
+The BF-140 Boiler Feedwater Pump supplies treated feedwater to the boiler drum against drum operating pressure. It is designed for continuous duty in a ventilated industrial environment and is rated for 45 kW at its nominal operating point.
+
+The BF-140 is installed on a rigid fabricated skid with anchoring bolts and isolation where specified. Adjacent clearances must allow safe access for inspection and removal of the guard or cover.
+
+Section 2: Technical Specifications
+
+| Parameter | Value |
+|---|---|
+| Asset tag                   | BF-140-A |
+| Equipment class             | Fluid Transfer |
+| Nominal operating point     | 3500 rpm |
+| Rated power / duty          | 45 kW, continuous duty |
+| Supply                      | 400 V / 3-phase / 50 Hz (where applicable) |
+| Ambient range               | -10 °C to +40 °C |
+| Protection / mounting       | IP55 enclosure, rigid skid mounting |
+| Handled medium              | feedwater |
+| Bearing service life (L10h) | 40 000 h under rated conditions |
+| Noise emission              | < 75 dB(A) at 1 m under rated load |
+
+Values in this table are the reference baseline for all diagnostic comparisons in this document.
+
+Section 3: Safety Prerequisites
+
+1. Isolate all energy sources feeding the BF-140 and apply lockout/tagout per site procedure before accessing the equipment.
+2. A second qualified person must be present for work involving high pressure water or hot piping.
+3. Barricade the work area and post a sign when guards or safety devices are removed.
+4. Confirm fire watch and hot-work permit requirements before any grinding, welding, or flame cutting nearby.
+5. Wear safety glasses, hearing protection, gloves, and safety shoes while working in the vicinity of the equipment.
+6. Verify the absence of hazardous process media — pressure, temperature, chemicals — before opening any cover or flange.
+
+Section 4: Diagnostic Procedure
+
+1. Check mounting hardware, foundation bolts, and hold-down clamps for looseness or fretting marks.
+2. Inspect belts, couplings, and drive elements for glazing, cracking, misalignment, or abnormal wear patterns.
+3. Listen for bearing noise, imbalance, rubbing, or irregular knocking while the machine is running under load.
+4. Perform a controlled stop and confirm that coast-down time is consistent with historical values.
+5. Measure motor current on all phases and compare with the rated value; a persistent imbalance above 5 percent requires investigation.
+6. Review the shift log and trend data for drifting parameters that preceded the current condition.
+
+Section 5: Maintenance Procedure
+
+1. Replace worn seals, gaskets, and O-rings; pressure-test or leak-check the reassembled unit before return to service.
+2. Renew lubricant according to the schedule in Section 5, and verify the lubricant type against the specification table.
+3. Function-test interlocks, sensors, and protective devices after any intervention that disturbs them.
+4. Isolate electrical power, lock out the disconnect, and tag the isolation point before any physical work.
+5. Verify alignment between driver and driven elements using the specified tolerance limits.
+6. Remove accumulated dust and debris from guards, housings, screens, and ventilation openings using low-pressure air or vacuum.
+7. Examine bearings, bushings, and mounts for wear, looseness, or excessive movement; measure and record clearances.
+
+Section 6: Common Failure Modes
+
+Cavitation and flow recirculation damage working elements progressively. A crackling noise resembling gravel indicates cavitation risk and requires immediate review of operating conditions.
+
+Bearing-related failures account for the largest share of unplanned interventions on rotating equipment of this class. Contributing factors include contamination ingress, lubricant degradation, misalignment, and overload.
+
+Seal and gasket leaks rarely develop suddenly. Trend weepage during rounds; a stain that doubles between checks indicates an active leak path that will progress.
+
+Section 7: Troubleshooting Guide
+
+| Symptom | Probable Causes | Recommended Action |
+|---|---|---|
+| Frequent protective trips | Relay settings, genuine overload, instrumentation fault | Review trip records; test relay; verify instrument calibration |
+| Current above rating | Mechanical overload, voltage imbalance, phase loss, driven element binding | Measure phases; inspect driven element; check supply quality |
+| Abnormal noise during operation | Bearing damage, rubbing contact, lubricant starvation | Stop unit; inspect bearings and clearances; re-lubricate |
+| Overheating | Overloading, blocked ventilation, insufficient lubricant, high ambient | Reduce load; clean openings; check lubricant; verify ambient |
+| Slow or failed start | Low supply voltage, seized working element, control fault | Measure starting voltage; rotate element by hand after isolation |
+| Leakage at seals or joints | Worn seals, loose fasteners, gasket damage, thermal cycling | Replace seals; re-torque to spec; renew gaskets |
+| Corrosion or coating damage | Aggressive environment, coating breakdown, water ingress | Assess extent; repair coating; improve enclosure sealing |
+| Reduced output / performance | Worn working element, internal leakage, blocked passage, speed drift | Inspect element; check internal clearances; clean passages |
+
+Section 8: Inspection and Records
+
+Inspection findings shall be recorded in the CMMS against asset tag BF-140-A. Minimum recorded data: date, inspector, operating hours, measured parameters, parts replaced, and next due date. Records are retained for the life of the asset plus five years.
+
+Section 9: Standard Work Checklist
+
+[ ] Work permit and isolation certificate issued and signed
+[ ] LOTO applied at all identified energy sources
+[ ] Zero energy state verified by test-before-touch
+[ ] PPE worn and in date; task-specific PPE confirmed
+[ ] Guards removed, tagged, and stored safely
+[ ] Components inspected per Section 4 steps
+[ ] Fasteners re-torqued to specified values
+[ ] Lubricant renewed and type verified
+[ ] Guards and safety devices reinstalled
+[ ] Interlocks and protective devices function-tested
+[ ] Area cleaned; tools and parts accounted for
+[ ] Restart performed under controlled conditions
+[ ] Parameters (current, vibration, temperature) recorded
+[ ] Work order closed with findings in CMMS
+
+Section 11: Lubrication Requirements
+
+Record every lubrication event with lubricant batch number in the CMMS to support warranty and failure analysis.
+
+Over-greasing is a common cause of seal failure and overheating. Apply the quantity specified in the table and purge old grease through the relief port.
+
+Lubrication intervals assume clean operating conditions and rated load. Halve the interval in dusty, hot, or humid environments.
+
+Verify compatibility before mixing lubricants. When changing lubricant type, flush the cavity and renew seals.
+
+Section 12: Operating Limits and Precautions
+
+Monitor the trend of the parameters in Section 2 rather than absolute alarms alone; slow drift gives early warning of developing faults.
+
+Frequent starts and stops stress the drive train. Allow the minimum cooldown or run-up interval specified before re-energizing.
+
+Do not operate with guards removed, interlocks defeated, or known leaks unattended.
+
+Operating the BF-140 above its rated point reduces component life exponentially; a 10 percent overload can halve bearing life.
+
+Section 13: General Workmanship Notes
+
+Housekeeping guidance: Dust and debris are both a fire load and a heat-insulating layer. Keep the equipment surroundings clean as a standing condition, not a periodic task.
+
+Communication guidance: Hand over open findings to the next shift in writing, including the isolation status and any parts on order.
+
+Measurement guidance: Record ambient conditions together with equipment readings so that comparisons across seasons remain meaningful.
+
+General guidance: Always begin an intervention with a review of the equipment history. The last three work orders often reveal a pattern that isolates the current fault faster than any single measurement.
+
+Quality guidance: Use only parts listed in the spare parts reference. Substitute parts require engineering approval before installation.
+
+Appendix A: Fastener Torque Reference
+
+| Fastener size | Property class | Torque (dry) | Torque (lightly oiled) |
+|---|---|---|---|
+| M8 | 8.8 | 24 N·m | 20 N·m |
+| M10 | 8.8 | 47 N·m | 39 N·m |
+| M12 | 8.8 | 82 N·m | 68 N·m |
+| M16 | 8.8 | 200 N·m | 165 N·m |
+| M20 | 8.8 | 390 N·m | 320 N·m |
+| M24 | 8.8 | 670 N·m | 560 N·m |
+
+Appendix B: Preventive Maintenance Schedule
+
+| Task | Frequency | Skill | Est. duration |
+|---|---|---|---|
+| Visual round and parameter check | Weekly | Operator | 15 min |
+| Cleaning of guards, openings, and surroundings | Monthly | Operator | 45 min |
+| Lubrication service | Quarterly | Technician | 60 min |
+| Detailed inspection and fastener check | Semi-annual | Technician | 3 h |
+| Alignment and drive element check | Annual | Technician | 4 h |
+| Full overhaul assessment | 3-yearly | Senior technician | 1 day |
+
+Appendix C: Synthetic Case Studies
+
+Case study (synthetic): A unit tripped repeatedly on overload. The driven element was binding after a repair left a spacer mispositioned. Correct reassembly and a controlled restart confirmed normal current draw.
+
+Case study (synthetic): A similar unit in the corpus fleet showed rising 1X vibration over six weeks. Investigation found foundation bolt looseness from thermal cycling after a process upset. Re-torquing to specification restored baseline vibration without part replacement.
+
+Case study (synthetic): Recurring seal leaks were found to follow a lubricant change. The replacement lubricant was incompatible with the elastomer, causing swelling. Restoring the specified lubricant and renewing seals eliminated the leaks.
+
+Appendix D: Knowledge Check (Synthetic)
+
+Q1. What must be verified before reaching through any opening? — A: The working element and shaft are completely stationary and energy isolation is verified.
+Q4. State the test-before-touch rule. — A: After isolation, attempt start and test for absence of energy before touching the equipment.
+Q5. What records are mandatory after maintenance? — A: Date, inspector, hours, measured parameters, parts replaced, next due date in the CMMS.
+Q3. Why is trend monitoring preferred over absolute alarm limits? — A: Slow drift reveals developing faults before alarm thresholds are crossed.
+
+Appendix E: Document Control
+
+Revision history: v1.0 — initial issue of this synthetic training document for the BF-140 equipment class.
+This document is part of a synthetic corpus generated for training and evaluation purposes. It contains no real personal data and no proprietary site information.
+All equipment designations, asset tags, and parameter values are fictional. Any resemblance to actual installations is coincidental.
+
+Section 10: Definitions and Abbreviations
+
+- **MTBF**: Mean Time Between Failures, a reliability statistic.
+- **LOTO**: Lockout/Tagout — the control of hazardous energy procedure.
+- **NPSH**: Net Positive Suction Head, a pump suction condition parameter.
+- **PPE**: Personal Protective Equipment required for the task.
+- **IR**: Infrared thermography for non-contact temperature screening.
+- **PM**: Preventive Maintenance task performed on schedule.
